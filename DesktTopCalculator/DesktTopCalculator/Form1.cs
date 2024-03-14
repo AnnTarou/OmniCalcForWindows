@@ -10,31 +10,21 @@ namespace DesktTopCalculator
         //Keepした計算式を入れるテキストボックスの名前はKeepBox
 
         //数字の入力は初めてか？
-        private bool firstflag = true;
+        public static bool firstflag = true;
 
         //数字の入力可否操作のため
-        private bool canflag = true;
+        public static bool canflag = true;
 
         //クリックされた値を格納するList
-        List<string> expression = new List<string>();
+        public static List<string> expression = new List<string>();
 
-        //計算用の文字列を格納する
-        string? formula = "";
-
-
-        //Keepボタンが押されたときにListの内容を一時的に保管するIEnumerable
-        //基本読み取り専用でメモリの節約が期待されるため採用
-        IEnumerable<string> keepresult;
-
-
+        Calc cl = new Calc();
         public Form1()
         {
             InitializeComponent();
         }
 
-
-        //------ここから各ボタンのイベントハンドラ-----------------------
-
+        //------ここから各ボタンのイベントハンドラ--------------------
         private void button0_Click(object sender, EventArgs e)
         {
             AddNumber("0");
@@ -79,15 +69,16 @@ namespace DesktTopCalculator
         {
             AddNumber("00");
         }
-
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
-            if (firstflag == true)//コンマが先頭で押された場合
+            //コンマが先頭で押された場合
+            if (firstflag == true)
             {
                 AddNumber("0");
                 AddNumber(".");
             }
-            else if (expression.Last().Last().ToString() == ".")//直前にカンマがある場合
+            //直前にカンマがある場合
+            else if (expression.Last().Last().ToString() == ".")
             {
                 return;
             }
@@ -96,10 +87,8 @@ namespace DesktTopCalculator
                 AddNumber(".");
             }
         }
-
         private void buttonpuls_Click(object sender, EventArgs e)
         {
-
             AddOperator("+");
         }
         private void buttonminus_Click(object sender, EventArgs e)
@@ -114,7 +103,6 @@ namespace DesktTopCalculator
         {
             AddOperator("÷");
         }
-
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
             if (expression.Count == 0)
@@ -122,11 +110,13 @@ namespace DesktTopCalculator
                 expression.Add("(");
                 UpdateDisplay();
             }
-            else if ((expression.Count > 0) && (expression.Last().Last().ToString() == ")"))//直前に")"がある時
+            //直前に")"がある時
+            else if ((expression.Count > 0) && (expression.Last().Last().ToString() == ")"))
             {
                 return;
             }
-            else if ((expression.Count > 0) && (expression.Last().Last().ToString() == "."))//直前にカンマがある時
+            //直前にカンマがある時
+            else if ((expression.Count > 0) && (expression.Last().Last().ToString() == "."))
             {
                 return;
             }
@@ -134,24 +124,26 @@ namespace DesktTopCalculator
             {
                 expression.Add("(");
                 UpdateDisplay();
-
             }
         }
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
-            ElseButton(")");            
+            AddElse(")");
         }
         private void buttonpercent_Click(object sender, EventArgs e)
         {
-            if (firstflag == true)//初めての入力の時＆演算子の直後
+            //初めての入力の時＆演算子の直後
+            if (firstflag == true)
             {
                 return;
             }
-            else if (expression.Last().Last().ToString() == ".")//直前にカンマがある時
+            //直前にカンマがある時
+            else if (expression.Last().Last().ToString() == ".")
             {
                 return;
             }
-            else if (expression.Last().Last().ToString() == "%")//直前に%がある時
+            //直前に%がある時
+            else if (expression.Last().Last().ToString() == "%")
             {
                 return;
             }
@@ -159,38 +151,41 @@ namespace DesktTopCalculator
             {
                 expression.Add("%");
                 UpdateDisplay();
-                canflag = false;//直後に数字を入力させない
+                //直後に数字を入力させない
+                canflag = false;
             }
         }
         private void buttonequal_Click(object sender, EventArgs e)
         {
-            Evaluation();//計算のために文字列を新たに取得するメソッド
-
-            Calculate();//計算メソッド
-
-            canflag = false;//直後に数字を入力させない
-
+            //計算のために文字列を新たに取得するメソッド
+            cl.Evaluate(expression);
+            //計算メソッド
+            cl.Calculate();
+            AddElse("=");
+            expression.Add(cl.resultnumber);
+            UpdateDisplay();
+            //直後に数字を入力させない
+            canflag = false;
         }
-
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
-            if (expression.Count > 0)//Listに要素がある時、末尾を削除
+            //Listに要素がある時、末尾を削除
+            if (expression.Count > 0)
             {
                 expression.RemoveAt(expression.Count - 1);
                 Display.Text = string.Join("", expression);
             }
-            else if (expression.Count == 0)//List空の時の例外処理
+            //Listが空の時の処理
+            else if (expression.Count == 0)
             {
                 return;
             }
         }
-
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
             expression.Clear();
             Display.Text = "";
         }
-
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
             expression.Clear();
@@ -198,31 +193,28 @@ namespace DesktTopCalculator
             //※Keepするために使用していた配列も削除する予定！！
             KeepBox.Text = "";
 
-        }
-        //--------------ここから各メソッド----------------------------
+        }       
+    // 数字をListへ追加し、Displayへ表示させるメソッド
+    //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
+    //※すなわち0123のような表記を許容する
+    //※またカンマの数も表記の時点では言及せず計算の時点でエラーメッセージを出す予定
 
-        // 数字をListへ追加し、Displayへ表示させるメソッド
-
-        //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
-        //※すなわち0123のような表記を許容する
-        //※またカンマの数も表記の時点では言及せず計算の時点でエラーメッセージを出す予定
-
-        private void AddNumber(string number)
+    public void AddNumber(string number)
         {
             expression.Add(number);
             UpdateDisplay();
-            if (firstflag == true)//数字が初めての入力だった場合
+            //数字が初めての入力だった場合
+            if (firstflag == true)
             {
                 firstflag = false;
             }
             canflag = true;
         }
-
         // 演算子をListへ追加し、Displayへ表示させるメソッド
-
-        private void AddOperator(string ope)
+        public void AddOperator(string ope)
         {
-            if (firstflag == true) //入力はじめまたは演算子が直前にある時
+            //入力はじめまたは演算子が直前にある時
+            if (firstflag == true)
             {
                 return;
             }
@@ -231,19 +223,21 @@ namespace DesktTopCalculator
             firstflag = true;
             canflag = true;
         }
-
         //")"と"="ボタンをListへ追加するメソッド
-        private void ElseButton(string button)
+        public void AddElse(string button)
         {
-            if (firstflag == true)//初めての入力の時＆演算子の直後
+            //初めての入力の時＆演算子の直後
+            if (firstflag == true)
             {
                 return;
             }
-            else if (expression.Last().Last().ToString() == ".")//直前にカンマがある時
+            //直前にカンマがある時
+            else if (expression.Last().Last().ToString() == ".")
             {
                 return;
             }
-            else if (expression.Last().Last().ToString() == "(")//直前にカンマがある時
+            //直前にカンマがある時
+            else if (expression.Last().Last().ToString() == "(")
             {
                 return;
             }
@@ -251,13 +245,14 @@ namespace DesktTopCalculator
             {
                 expression.Add(button);
                 UpdateDisplay();
-                canflag = true;//フラグの初期化
+                //フラグの初期化
+                canflag = true;
             }
         }
-        
+
         //表示画面の数字に3桁区切りを入れるメソッド
         //※↓↓↓このメソッドは不十分の為改良必要。。。
-        private void UpdateDisplay()
+        public void UpdateDisplay()
         {
             string format = string.Join("", expression);
             double result;
@@ -271,13 +266,19 @@ namespace DesktTopCalculator
                 Display.Text = format;
             }
         }
+    }
+    public class Calc
+    {
+        //計算用の文字列を格納する
+        public string? formula = "";
+        //結果を格納する文字列
+        public string? resultnumber = "";
 
         //入力された数値の評価と計算の前準備
         //計算用として string型formulaへ値を代入
-
-        private void Evaluation()
+        public void Evaluate(List<string> list)
         {
-            foreach (string f in expression)
+            foreach (string f in list)
             {
                 switch (f)
                 {
@@ -293,7 +294,6 @@ namespace DesktTopCalculator
                 }
             }
         }
-
         //計算メソッド
         //https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
         public void Calculate()
@@ -301,17 +301,14 @@ namespace DesktTopCalculator
             try
             {
                 var result = Calculator.Calculate(formula);
-                    ElseButton("=");
-                    expression.Add(result.Result.ToString());
-                    UpdateDisplay();
+                resultnumber = result.Result.ToString();
             }
-            catch 
+            catch
             {
                 MessageBox.Show("Cannot be calculated", "Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-         
-        }
 
+        }
     }
 }
