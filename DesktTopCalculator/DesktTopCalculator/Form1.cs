@@ -7,68 +7,90 @@ namespace DesktTopCalculator
     public partial class Form1 : Form
     {
         //計算式を表示するテキストボックスの名前はDisplay
-        //Keepした計算式を入れるテキストボックスの名前はKeepBox
+        //Keepした計算式を入れるリストボックスの名前はKeepBox
 
         //数字の入力は初めてか？
-        public static bool firstflag = true;
+        //trueのとき"%, ),演算子"の入力不可、ピリオドは"0."とする
+        //falseのときすべての入力可
+        public bool firstflag = true;
 
         //数字の入力可否操作のため
-        public static bool canflag = true;
+        //このフラグがfalseのときは数字入力不可
+        public bool canflag = true;
 
-        //クリックされた値を格納するList
-        public static List<string> expression = new List<string>();
+        //クリックされた値を格納するための文字列
+        public string input = "";
 
-        Calc cl = new Calc();
+        //文字列の値を評価し格納するList
+        List<string> expression;
+
+        //計算メソッドクラスのオブジェクト
+        Calc cl;
         public Form1()
         {
             InitializeComponent();
+            expression = new List<string>();
+            cl= new Calc();
         }
 
-        //------ここから各ボタンのイベントハンドラ--------------------
+        //------ここから各ボタンのイベントハンドラ-----------------
+
+        //[0]を押したとき
         private void button0_Click(object sender, EventArgs e)
         {
             AddNumber("0");
         }
+        //[1]を押したとき
         private void button1_Click(object sender, EventArgs e)
         {
             AddNumber("1");
         }
+        //[2]を押したとき
         private void button2_Click(object sender, EventArgs e)
         {
             AddNumber("2");
         }
+        //[3]を押したとき
         private void button3_Click(object sender, EventArgs e)
         {
             AddNumber("3");
         }
+        //[4]を押したとき
         private void button4_Click(object sender, EventArgs e)
         {
             AddNumber("4");
         }
+        //[5]を押したとき
         private void button5_Click(object sender, EventArgs e)
         {
             AddNumber("5");
         }
+        //[6]を押したとき
         private void button6_Click(object sender, EventArgs e)
         {
             AddNumber("6");
         }
+        //[7]を押したとき
         private void button7_Click(object sender, EventArgs e)
         {
             AddNumber("7");
         }
+        //[8]を押したとき
         private void button8_Click(object sender, EventArgs e)
         {
             AddNumber("8");
         }
+        //[9]を押したとき
         private void button9_Click(object sender, EventArgs e)
         {
             AddNumber("9");
         }
+        //[00]を押したとき
         private void button00_Click(object sender, EventArgs e)
         {
             AddNumber("00");
         }
+        //[.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
             //コンマが先頭で押された場合
@@ -87,22 +109,27 @@ namespace DesktTopCalculator
                 AddNumber(".");
             }
         }
+        //[+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
         {
             AddOperator("+");
         }
+        //[-]を押したとき
         private void buttonminus_Click(object sender, EventArgs e)
         {
             AddOperator("-");
         }
+        //[×]を押したとき
         private void buttonmultiply_Click(object sender, EventArgs e)
         {
             AddOperator("×");
         }
+        //[÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
         {
             AddOperator("÷");
         }
+        //[前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
             if (expression.Count == 0)
@@ -126,10 +153,12 @@ namespace DesktTopCalculator
                 UpdateDisplay();
             }
         }
+        //[後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
             AddElse(")");
         }
+        //[％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
         {
             //初めての入力の時＆演算子の直後
@@ -155,6 +184,7 @@ namespace DesktTopCalculator
                 canflag = false;
             }
         }
+        //[＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
         {
             //計算のために文字列を新たに取得するメソッド
@@ -167,6 +197,7 @@ namespace DesktTopCalculator
             //直後に数字を入力させない
             canflag = false;
         }
+        //[delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
             //Listに要素がある時、末尾を削除
@@ -181,11 +212,13 @@ namespace DesktTopCalculator
                 return;
             }
         }
+        //[C]を押したとき
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
             expression.Clear();
             Display.Text = "";
         }
+        //[AC]を押したとき
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
             expression.Clear();
@@ -194,14 +227,16 @@ namespace DesktTopCalculator
             KeepBox.Text = "";
 
         }       
-    // 数字をListへ追加し、Displayへ表示させるメソッド
+    // 数字を文字列inputへ追加し、Displayへ表示させるメソッド
     //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
     //※すなわち0123のような表記を許容する
-    //※またカンマの数も表記の時点では言及せず計算の時点でエラーメッセージを出す予定
+    //※またピリオドの数も表記の時点では言及せず計算の時点でエラーメッセージを出す
 
+
+    //数字の追加メソッド
     public void AddNumber(string number)
         {
-            expression.Add(number);
+           ;
             UpdateDisplay();
             //数字が初めての入力だった場合
             if (firstflag == true)
