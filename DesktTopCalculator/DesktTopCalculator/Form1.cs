@@ -30,7 +30,7 @@ namespace DesktTopCalculator
         {
             InitializeComponent();
             expression = new List<string>();
-            cl= new Calc();
+            cl = new Calc();
         }
 
         //------ここから各ボタンのイベントハンドラ-----------------
@@ -93,21 +93,7 @@ namespace DesktTopCalculator
         //[.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
-            //コンマが先頭で押された場合
-            if (firstflag == true)
-            {
-                AddNumber("0");
-                AddNumber(".");
-            }
-            //直前にカンマがある場合
-            else if (expression.Last().Last().ToString() == ".")
-            {
-                return;
-            }
-            else
-            {
-                AddNumber(".");
-            }
+            AddPeriod(".");
         }
         //[+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
@@ -132,57 +118,18 @@ namespace DesktTopCalculator
         //[前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
-            if (expression.Count == 0)
-            {
-                expression.Add("(");
-                UpdateDisplay();
-            }
-            //直前に")"がある時
-            else if ((expression.Count > 0) && (expression.Last().Last().ToString() == ")"))
-            {
-                return;
-            }
-            //直前にカンマがある時
-            else if ((expression.Count > 0) && (expression.Last().Last().ToString() == "."))
-            {
-                return;
-            }
-            else
-            {
-                expression.Add("(");
-                UpdateDisplay();
-            }
+            AddFrontBracket("(");
         }
         //[後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
-            AddElse(")");
+            AddBackBracket(")");
         }
         //[％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
         {
-            //初めての入力の時＆演算子の直後
-            if (firstflag == true)
-            {
-                return;
-            }
-            //直前にカンマがある時
-            else if (expression.Last().Last().ToString() == ".")
-            {
-                return;
-            }
-            //直前に%がある時
-            else if (expression.Last().Last().ToString() == "%")
-            {
-                return;
-            }
-            else
-            {
-                expression.Add("%");
-                UpdateDisplay();
-                //直後に数字を入力させない
-                canflag = false;
-            }
+            AddPercent("%");
+            
         }
         //[＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
@@ -226,18 +173,18 @@ namespace DesktTopCalculator
             //※Keepするために使用していた配列も削除する予定！！
             KeepBox.Text = "";
 
-        }       
-    // 数字を文字列inputへ追加し、Displayへ表示させるメソッド
-    //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
-    //※すなわち0123のような表記を許容する
-    //※またピリオドの数も表記の時点では言及せず計算の時点でエラーメッセージを出す
+        }
+        // 数字を文字列inputへ追加し、Displayへ表示させるメソッド
+        //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
+        //※すなわち0123のような表記を許容する
+        //※またピリオドの数も表記の時点では言及せず計算の時点でエラーメッセージを出す
 
 
-    //数字の追加メソッド
-    public void AddNumber(string number)
+        //数字を文字列inputへ追加
+        public void AddNumber(string number)
         {
-           ;
-            UpdateDisplay();
+            //文字列へ数値追加
+            input += number;
             //数字が初めての入力だった場合
             if (firstflag == true)
             {
@@ -245,7 +192,8 @@ namespace DesktTopCalculator
             }
             canflag = true;
         }
-        // 演算子をListへ追加し、Displayへ表示させるメソッド
+
+        // 演算子を文字列inputへ追加
         public void AddOperator(string ope)
         {
             //入力はじめまたは演算子が直前にある時
@@ -253,53 +201,151 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            expression.Add(ope);
-            UpdateDisplay();
+            input += ope;
             firstflag = true;
             canflag = true;
         }
-        //")"と"="ボタンをListへ追加するメソッド
-        public void AddElse(string button)
+
+        //ピリオドを文字列inputへ追加
+        public void AddPeriod(string period)
         {
-            //初めての入力の時＆演算子の直後
+            //コンマが先頭で押された場合
+            if (firstflag == true)
+            {
+                input += "0.";
+            }
+            //直前にカンマがある場合
+            else if (input[input.Length - 1] == '.')
+            {
+                return;
+            }
+            else
+            {
+                input += period;
+            }
+            firstflag = true;
+            canflag = true;
+        }
+        //前括弧を文字列inputへ追加
+        public void AddFrontBracket(string fb)
+        {
+            //直前にピリオドがある時
+            if (input[input.Length - 1] == '.')
+            {
+                return;
+            }
+            //直前に")"または"%"がある時
+            else if (canflag == false)
+            {
+                return;
+            }
+            //初めての入力でないとき
+            else if (firstflag == false)
+            {
+                return;
+            }
+            else
+            {
+                input += fb;
+            }
+        }
+        //後括弧を文字列inputへ追加
+        public void AddBackBracket(string bb)
+        {
+            //数字のあとのみ入力可
+            if (firstflag == false)
+            {
+                input += bb;
+                //直後に数字を入力させない
+                canflag = false;
+            }
+            else
+            {
+                return;
+            }
+        }
+    //パーセントを文字列inputへ追加
+        public void AddPercent(string p)
+        {
+            //入力はじめまたは演算子orピリオドが直前にある時
             if (firstflag == true)
             {
                 return;
             }
-            //直前にカンマがある時
-            else if (expression.Last().Last().ToString() == ".")
-            {
-                return;
-            }
-            //直前にカンマがある時
-            else if (expression.Last().Last().ToString() == "(")
+            //直前に%がある時
+            //canflag==0にしていないのは後括弧の直後を許容するため
+            else if (input[input.Length-1] == '%')
             {
                 return;
             }
             else
             {
-                expression.Add(button);
-                UpdateDisplay();
-                //フラグの初期化
-                canflag = true;
+                input += p;
+                //直後に数字を入力させない
+                canflag = false;
             }
-        }
+        } 
 
-        //表示画面の数字に3桁区切りを入れるメソッド
-        //※↓↓↓このメソッドは不十分の為改良必要。。。
+    //文字列inputを評価し数式としてListへ追加する
         public void UpdateDisplay()
         {
+                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             string format = string.Join("", expression);
-            double result;
-            if (double.TryParse(format, out result))
-            {
-                Display.Text = result.ToString("#,###");
-            }
-            else
-            {
-                // 表示できる形式の数値でない場合、そのまま表示
-                Display.Text = format;
-            }
+                double result;
+                if (double.TryParse(format, out result))
+                {
+                    Display.Text = result.ToString("#,###");
+                }
+                else
+                {
+                    // 表示できる形式の数値でない場合、そのまま表示
+                    Display.Text = format;
+                }
         }
     }
     public class Calc
