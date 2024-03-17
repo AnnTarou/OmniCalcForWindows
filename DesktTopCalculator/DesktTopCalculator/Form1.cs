@@ -2,6 +2,8 @@ using Antlr4.Runtime;
 using System.Linq.Expressions;
 using Dangl.Calculator;
 using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace DesktTopCalculator
 {
@@ -25,9 +27,6 @@ namespace DesktTopCalculator
         //inputされた数式を評価して格納するためのList
         List<string> expression;
 
-        //評価後Displayへ表示するための文字列
-        public string output;
-
         //計算メソッドクラスのオブジェクト
         Calc cl;
         public Form1()
@@ -42,115 +41,115 @@ namespace DesktTopCalculator
         private void button0_Click(object sender, EventArgs e)
         {
             AddNumber("0");
-            Display.Text = output;
+            UpdateDisplay(input);           
         }
         //[1]を押したとき
         private void button1_Click(object sender, EventArgs e)
         {
             AddNumber("1");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[2]を押したとき
         private void button2_Click(object sender, EventArgs e)
         {
             AddNumber("2");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[3]を押したとき
         private void button3_Click(object sender, EventArgs e)
         {
             AddNumber("3");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[4]を押したとき
         private void button4_Click(object sender, EventArgs e)
         {
             AddNumber("4");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[5]を押したとき
         private void button5_Click(object sender, EventArgs e)
         {
             AddNumber("5");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[6]を押したとき
         private void button6_Click(object sender, EventArgs e)
         {
             AddNumber("6");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[7]を押したとき
         private void button7_Click(object sender, EventArgs e)
         {
             AddNumber("7");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[8]を押したとき
         private void button8_Click(object sender, EventArgs e)
         {
             AddNumber("8");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[9]を押したとき
         private void button9_Click(object sender, EventArgs e)
         {
             AddNumber("9");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[00]を押したとき
         private void button00_Click(object sender, EventArgs e)
         {
             AddNumber("00");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
             AddPeriod(".");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
         {
             AddOperator("+");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[-]を押したとき
         private void buttonminus_Click(object sender, EventArgs e)
         {
             AddOperator("-");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[×]を押したとき
         private void buttonmultiply_Click(object sender, EventArgs e)
         {
             AddOperator("×");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
         {
             AddOperator("÷");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
             AddFrontBracket("(");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
             AddBackBracket(")");
-            Display.Text = output;
+            UpdateDisplay(input);
         }
         //[％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
         {
             AddPercent("%");
-            Display.Text = output;
+            UpdateDisplay(input);
 
         }
         //[＝]を押したとき
@@ -160,11 +159,9 @@ namespace DesktTopCalculator
             cl.Evaluate(expression);
             //計算メソッド
             cl.Calculate();
-            AddElse("=");
-            expression.Add(cl.resultnumber);
-            UpdateDisplay();
-            //直後に数字を入力させない
-            canflag = false;
+
+            AddEqual("=", cl.resultnumber);
+            UpdateDisplay(input);
         }
         //[delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
@@ -185,7 +182,6 @@ namespace DesktTopCalculator
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
             input = "";
-            output = "";
             Display.Text = "";
             firstflag = true;
             canflag = true;
@@ -194,7 +190,6 @@ namespace DesktTopCalculator
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
             input = "";
-            output = "";
             Display.Text = "";
             //※Keepするために使用していた配列も削除する予定！！
             KeepBox.Text = "";
@@ -210,9 +205,14 @@ namespace DesktTopCalculator
         //数字を文字列inputへ追加
         public void AddNumber(string number)
         {
-            //文字列へ数値追加
-            input += number;
-            //数字が初めての入力だった場合
+            if(canflag == false)
+            {
+                return;
+            }
+            else
+            {
+                input += number;
+            }
             if (firstflag == true)
             {
                 firstflag = false;
@@ -300,7 +300,7 @@ namespace DesktTopCalculator
                 return;
             }
             //直前に%がある時
-            //canflag==0にしていないのは後括弧の直後を許容するため
+            //canflag==falseにしていないのは後括弧の直後を許容するため
             else if (input[input.Length - 1] == '%')
             {
                 return;
@@ -312,12 +312,19 @@ namespace DesktTopCalculator
                 canflag = false;
             }
         }
+        //イコール以降を文字列inputへ追加
+        public void AddEqual(string eql, string res)
+        {
+            input += (eql + res);
+            //直後に数字を入力させない
+            canflag = false;
+        }
 
         //文字列inputを評価し数式としてListへ追加する
-        public void UpdateDisplay(string input)
+        public void UpdateDisplay(string inp)
         {
             //正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
-            expression = Regex.Split(input, @"(\D+)").ToList();
+            expression = Regex.Split(inp, @"(\D+)").ToList();
 
             for (int i = 0; i < expression.Count; i++)
             {
@@ -325,30 +332,53 @@ namespace DesktTopCalculator
                 if (IsNumeric(expression[i]))
                 {
                     decimal number = Convert.ToDecimal(expression[i]);
-                    expression[i] = number.ToString("#,##0");
+                    expression[i] = number.ToString("N0");
                 }
+                //ピリオドの数が不適切な時
+                else if (ContainsMultiplePeriods(expression[i]))
+                {
+                    MessageBox.Show("(.)Incorrect number of periods", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                }                
                 //パーセントかつ直前が数字だった時
                 else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
                 {
                     decimal number = Convert.ToDecimal(expression[i - 1]);
-                    decimal answer = Math.Round(number * 0.01m, 10);
-                    expression[i - 1] = answer.ToString("#,##0");
+                    decimal answer = number * 0.01m;
+                    expression[i - 1] = answer.ToString("#,##0.##########");
                     // % を削除する
                     expression.RemoveAt(i);
+                    //inputの％を削除する
+                    input = input.TrimEnd('%');
+                    //inputに計算後の数値を入れなおす
+                    input = string.Concat(expression.Select(item => item.Replace(",", "")));
                     // インデックスを戻す
                     i--;
                 }
             }
-            //Listの要素を文字列へ代入
-            output = string.Concat(expression);
-        }
-        //数値だったらdecimal型の数値を返す
-        public static bool IsNumeric(string input)
-        {
-            return decimal.TryParse(input, out _);
+            //Listの要素を文字列へ再度代入
+            Display.Text = string.Concat(expression);            
         }
 
+        //文字列が数値かを問う
+        public static bool IsNumeric(string inp)
+        {
+           return decimal.TryParse(inp, out _);
+        }
+        //文字列の中にピリオドが2個以上含まれるかを問う
+        public static bool ContainsMultiplePeriods(string inp)
+        {
+            // 数字の中にピリオドが2個以上含まれる正規表現パターン
+            string pattern = @"\d+\.\d+\.\d+";
+
+            // パターンにマッチするかどうかを確認
+            return Regex.IsMatch(inp, pattern);
+        }
     }
+
+    //計算用のクラス
     public class Calc
     {
         //計算用の文字列を格納する
@@ -356,16 +386,16 @@ namespace DesktTopCalculator
         //結果を格納する文字列
         public string? resultnumber = "";
 
-        //入力された数値の評価と計算の前準備
-        //計算用として string型formulaへ値を代入
+    //計算用に文字列を変換させ、不適切な入力に対しエラーを出す
         public void Evaluate(List<string> list)
         {
+           //計算用の文字列の作成
             foreach (var item in list)
             {
                 switch (item)
                 {
                     case "×":
-                        formula += "*";
+                        formula += "*";                       
                         break;
                     case "÷":
                         formula += "/";
@@ -375,9 +405,24 @@ namespace DesktTopCalculator
                         break;
                 }
             }
+            //前括弧と後括弧の数が違う場合はエラー
+            if (!(IsBalanced(formula)))
+            {
+                MessageBox.Show("The number of parentheses() doesn't match", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return; 
+            }
         }
-        //計算メソッド
-        //https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
+    //前括弧と後括弧の数が同じか調べる
+        public static bool IsBalanced(string f)
+    {
+        int openingCount = Regex.Matches(f, @"\(").Count;
+        int closingCount = Regex.Matches(f, @"\)").Count;
+        return openingCount == closingCount;
+    }
+
+    //計算メソッド
+    //https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
         public void Calculate()
         {
             try
