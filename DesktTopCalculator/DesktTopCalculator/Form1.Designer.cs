@@ -52,9 +52,9 @@
             buttonTextClear = new Button();
             buttonKeep = new Button();
             buttonchardelete = new Button();
-            KeepBox = new TextBox();
             Display = new TextBox();
             buttonreturn = new Button();
+            KeepBox = new ListBox();
             SuspendLayout();
             // 
             // button1
@@ -336,17 +336,6 @@
             buttonchardelete.UseVisualStyleBackColor = true;
             buttonchardelete.Click += buttonchardelete_Click;
             // 
-            // KeepBox
-            // 
-            KeepBox.Font = new Font("メイリオ", 11F, FontStyle.Regular, GraphicsUnit.Point, 128);
-            KeepBox.Location = new Point(12, 8);
-            KeepBox.Multiline = true;
-            KeepBox.Name = "KeepBox";
-            KeepBox.ReadOnly = true;
-            KeepBox.ScrollBars = ScrollBars.Vertical;
-            KeepBox.Size = new Size(460, 160);
-            KeepBox.TabIndex = 47;
-            // 
             // Display
             // 
             Display.Font = new Font("メイリオ", 20F, FontStyle.Regular, GraphicsUnit.Point, 128);
@@ -367,15 +356,24 @@
             buttonreturn.Text = "Return";
             buttonreturn.UseVisualStyleBackColor = true;
             // 
+            // KeepBox
+            // 
+            KeepBox.FormattingEnabled = true;
+            KeepBox.ItemHeight = 25;
+            KeepBox.Location = new Point(13, 12);
+            KeepBox.Name = "KeepBox";
+            KeepBox.Size = new Size(459, 154);
+            KeepBox.TabIndex = 50;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaptionText;
             ClientSize = new Size(484, 690);
+            Controls.Add(KeepBox);
             Controls.Add(buttonreturn);
             Controls.Add(Display);
-            Controls.Add(KeepBox);
             Controls.Add(buttonchardelete);
             Controls.Add(buttonKeep);
             Controls.Add(buttonTextClear);
@@ -434,8 +432,8 @@
         private Button buttonTextClear;
         private Button buttonKeep;
         private Button buttonchardelete;
-        private TextBox KeepBox;
         private TextBox Display;
         private Button buttonreturn;
+        private ListBox KeepBox;
     }
 }
