@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Forms;
 
 namespace DesktTopCalculator
 {
@@ -18,6 +19,10 @@ namespace DesktTopCalculator
 
         //inputされた数式を評価して格納するためのList
         List<string> expression;
+
+
+        // カーソルの位置を追跡するための変数
+        public int cursorPosition = 0;
 
         //計算メソッドクラスのオブジェクト
         Calc cl;
@@ -37,133 +42,199 @@ namespace DesktTopCalculator
         //[0]を押したとき
         private void button0_Click(object sender, EventArgs e)
         {
-            AddNumber("0");
-            UpdateDisplay(Display.Text);           
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("0");
+            UpdateDisplay(Display.Text);
         }
         //[1]を押したとき
         private void button1_Click(object sender, EventArgs e)
         {
-            AddNumber("1");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("1");
             UpdateDisplay(Display.Text);
         }
         //[2]を押したとき
         private void button2_Click(object sender, EventArgs e)
         {
-            AddNumber("2");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("2");
             UpdateDisplay(Display.Text);
         }
         //[3]を押したとき
         private void button3_Click(object sender, EventArgs e)
         {
-            AddNumber("3");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("3");
             UpdateDisplay(Display.Text);
         }
         //[4]を押したとき
         private void button4_Click(object sender, EventArgs e)
         {
-            AddNumber("4");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("4");
             UpdateDisplay(Display.Text);
         }
         //[5]を押したとき
         private void button5_Click(object sender, EventArgs e)
         {
-            AddNumber("5");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("5");
             UpdateDisplay(Display.Text);
         }
         //[6]を押したとき
         private void button6_Click(object sender, EventArgs e)
         {
-            AddNumber("6");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("6");
             UpdateDisplay(Display.Text);
         }
         //[7]を押したとき
         private void button7_Click(object sender, EventArgs e)
         {
-            AddNumber("7");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("7");
             UpdateDisplay(Display.Text);
         }
         //[8]を押したとき
         private void button8_Click(object sender, EventArgs e)
         {
-            AddNumber("8");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("8");
             UpdateDisplay(Display.Text);
         }
         //[9]を押したとき
         private void button9_Click(object sender, EventArgs e)
         {
-            AddNumber("9");
+            if (endflag)
+            {
+                ClearMethod();
+            }
+            AddDisplay("9");
             UpdateDisplay(Display.Text);
         }
         //[00]を押したとき
         private void button00_Click(object sender, EventArgs e)
         {
-            AddNumber("00");
+            if (endflag)
+            {
+                ClearMethod();
+                return;
+            }
+            AddDisplay("00");
             UpdateDisplay(Display.Text);
         }
         //[.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
-            // テキストボックスのカーソル位置を取得
-            int cursorIndex = Display.SelectionStart;
-            //演算子または前括弧が直前にあるまたは入力はじめの時
-            if (Display.Text[cursorIndex - 1] == '+'
-                || Display.Text[cursorIndex - 1] == '-'
-                || Display.Text[cursorIndex - 1] == '×'
-                || Display.Text[cursorIndex - 1] == '÷'
-                || Display.Text[cursorIndex - 1] == '('
-                || Display.Text.Length == 0)
+            if (endflag)
             {
-                AddPeriod("0.");
+                ClearMethod();
             }
-            else
-            {
-                AddPeriod(".");
-            }
+            AddDisplay(".");
             UpdateDisplay(Display.Text);
         }
         //[+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
         {
-            AddOperator("+");
+            if (endflag)
+            {
+                SelectResult();
+            }
+            AddDisplay("+");
             UpdateDisplay(Display.Text);
         }
         //[-]を押したとき
         private void buttonminus_Click(object sender, EventArgs e)
         {
-            AddOperator("-");
+            if (endflag)
+            {
+                SelectResult();
+            }
+            AddDisplay("-");
             UpdateDisplay(Display.Text);
         }
         //[×]を押したとき
         private void buttonmultiply_Click(object sender, EventArgs e)
         {
-            AddOperator("×");
+            if (endflag)
+            {
+                SelectResult();
+            }
+            AddDisplay("×");
             UpdateDisplay(Display.Text);
         }
         //[÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
         {
-            AddOperator("÷");
+            if (endflag)
+            {
+                SelectResult();
+            }
+            AddDisplay("÷");
             UpdateDisplay(Display.Text);
         }
         //[前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
-            AddFrontBracket("(");
+            if (endflag)
+            {
+                SelectResult();
+            }
+            AddDisplay("(");
             UpdateDisplay(Display.Text);
         }
         //[後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
-            AddBackBracket(")");
+            if (endflag)
+            {
+                SelectResult();
+                return;
+            }
+            AddDisplay(")");
             UpdateDisplay(Display.Text);
         }
         //[％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
         {
-            AddPercent("%");
+
+            if (endflag)
+            {
+                SelectResult();
+                return;
+            }
+            AddDisplay("%");
             UpdateDisplay(Display.Text);
 
         }
+
         //[＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
         {
@@ -174,19 +245,48 @@ namespace DesktTopCalculator
 
             AddEqual("=", cl.resultnumber);
             UpdateDisplay(Display.Text);
-
+            //Keep,AC,Cしかボタンを押せないようにする
+            endflag = true;
+        }
+        //Displayがクリックされた時
+        private void Display_Click(object sender, EventArgs e)
+        {
+            //カーソル位置を取得
+            cursorPosition = Display.SelectionStart;
+        }
+        //Displayにキーダウンがあった時
+        private void Display_KeyDown(object sender, KeyEventArgs e)
+        {
+            //カーソル位置を取得
+            cursorPosition = Display.SelectionStart;
+            //右矢印キーが押されたとき
+            if (e.KeyCode == Keys.Right)
+            {
+                // カーソルがテキストボックスの末尾にない場合は、カーソルを右にずらす
+                if (Display.SelectionStart < Display.Text.Length)
+                {
+                    Display.SelectionStart++;
+                    Display.SelectionLength = 0;
+                }
+            }
         }
         //[delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
-            //Listに要素がある時、末尾を削除
-            if (expression.Count > 0)
+            //カーソルがなく文字列がある場合末尾より削除
+            if (cursorPosition == 0 && Display.Text.Length > 0)
             {
-                expression.RemoveAt(expression.Count - 1);
-                Display.Text = string.Join("", expression);
+                Display.Text = Display.Text.Remove(Display.Text.Length - 1);
+                UpdateDisplay(Display.Text);
             }
-            //Listが空の時の処理
-            else if (expression.Count == 0)
+            // カーソルがある場合はカーソルの左側の文字を削除
+            else if (cursorPosition > 0)
+            {
+                Display.Text = Display.Text.Remove(cursorPosition - 1, 1);
+                UpdateDisplay(Display.Text);
+            }
+            //文字列がない場合
+            else if ((cursorPosition <= 0) && (Display.Text.Length == 0))
             {
                 return;
             }
@@ -194,211 +294,57 @@ namespace DesktTopCalculator
         //[C]を押したとき
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
-            Display.Text = "";
+            ClearMethod();
         }
         //[AC]を押したとき
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
-            Display.Text = "";
             //※Keepするために使用していた配列も削除する予定！！
+            ClearMethod();
         }
+        //初期値に戻すメソッド
+        public void ClearMethod()
+        {
+            //カーソルを非表示にする
+            Cursor.Hide();
+
+            // Displayのクリア
+            Display.Clear();
+
+            //Listのクリア
+            expression.Clear();
+
+            // イベントハンドラを削除
+            Display.KeyDown -= Display_KeyDown;
+            Display.Click -= Display_Click;
+
+            //フィールド初期化            
+            endflag = false;
+            cursorPosition = 0;
+        }
+
         // 数字を文字列inputへ追加し、Displayへ表示させるメソッド
         //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
         //※すなわち0123のような表記を許容する
         //※またピリオドの数も表記の時点では言及せず計算の時点でエラーメッセージを出す
 
-
-     //数字をDisplayへ追加
-        public void AddNumber(string number)
+        //数字をDisplayへ追加
+        public void AddDisplay(string buttonText)
         {
-           // テキストボックスのカーソル位置を取得
-           int cursorIndex = Display.SelectionStart;
-
-            //直前が%か後括弧だった場合
-            if (Display.Text[cursorIndex - 1] == '%' || Display.Text[cursorIndex - 1] == ')')
-            {
-                return;
-            }
-            // カーソルが末尾にある場合はテキストを末尾に追加
-            else if (cursorIndex == Display.Text.Length)
-            {
-                Display.Text += number;
-            }
-            //Displayにカーソルがないとき末尾に追加
-            else if (cursorIndex == -1)
-            {
-                Display.Text += number;
-            }
-            //それ以外の時はカーソルの後ろに追加
-            else
-            {
-                Display.Text = Display.Text.Insert(cursorIndex, number);
-            }
+            Display.Text = Display.Text.Insert(cursorPosition, buttonText);
+            // カーソル位置を挿入した後の位置に移動
+            cursorPosition += buttonText.Length;
+            // テキストボックスのフォーカスを設定し、カーソルを表示
+            Display.Focus();
+            Display.SelectionStart = cursorPosition;
         }
 
-     // 演算子を文字列inputへ追加
-        public void AddOperator(string ope)
-        {
-            // テキストボックスのカーソル位置を取得
-            int cursorIndex = Display.SelectionStart;
-
-            //演算子または前括弧が直前にある時
-            if (Display.Text[cursorIndex - 1] == '+'
-                || Display.Text[cursorIndex - 1] == '-'
-                || Display.Text[cursorIndex - 1] == '×'
-                || Display.Text[cursorIndex - 1] == '÷'
-                || Display.Text[cursorIndex - 1] == '(')
-            {
-                return;
-            }
-            //初めての入力の時
-            else if(Display.Text.Length == 0)
-            {
-                return;
-            }
-            // カーソルが末尾にある場合はテキストを末尾に追加
-            else if (cursorIndex == Display.Text.Length)
-            {
-                Display.Text += ope;
-            }
-            //Displayにカーソルがないとき末尾に追加
-            else if (cursorIndex == -1)
-            {
-                Display.Text += ope;
-            }
-            //それ以外の時はカーソルの後ろに追加
-            else
-            {
-                Display.Text = Display.Text.Insert(cursorIndex, ope);
-            }
-        }
-    //ピリオドをDisplayへ追加
-        public void AddPeriod(string period)
-        {
-            // テキストボックスのカーソル位置を取得
-            int cursorIndex = Display.SelectionStart;
-
-            //直前にカンマがある場合
-            if (Display.Text[cursorIndex - 1] == '.' || Display.Text[cursorIndex - 1] == ')')
-            {
-                return;
-            }
-            // カーソルが末尾にある場合はテキストを末尾に追加
-            else if (cursorIndex == Display.Text.Length)
-            {
-                Display.Text += period;
-            }
-            //Displayにカーソルがないとき末尾に追加
-            else if (cursorIndex == -1)
-            {
-                Display.Text += period;
-            }
-            //それ以外の時はカーソルの後ろに追加
-            else
-            {
-                Display.Text = Display.Text.Insert(cursorIndex, period);
-            }
-        }
-     //前括弧をDisplayへ追加
-
-        public void AddFrontBracket(string fb)
-        {
-            // テキストボックスのカーソル位置を取得
-            int cursorIndex = Display.SelectionStart;
-
-            //後括弧が直前にある時
-            if ( Display.Text[cursorIndex - 1] == ')')
-            {
-                return;
-            }
-            // カーソルが末尾にある場合はテキストを末尾に追加
-            else if (cursorIndex == Display.Text.Length)
-            {
-                Display.Text +=fb;
-            }
-            //Displayにカーソルがないとき末尾に追加
-            else if (cursorIndex == -1)
-            {
-                Display.Text += fb;
-            }
-            //それ以外の時はカーソルの後ろに追加
-            else
-            {
-                Display.Text = Display.Text.Insert(cursorIndex, fb);
-            }
-        }
-        //後括弧を文字列Displayへ追加
-        public void AddBackBracket(string bb)
-        {
-            // テキストボックスのカーソル位置を取得
-            int cursorIndex = Display.SelectionStart;
-
-            //数字のあとのみ入力可
-            if (Char.IsDigit(Display.Text[cursorIndex - 1]))
-            {
-                 // カーソルが末尾にある場合はテキストを末尾に追加
-                if (cursorIndex == Display.Text.Length)
-                {
-                    Display.Text += bb;
-                }
-                //Displayにカーソルがないとき末尾に追加
-                else if (cursorIndex == -1)
-                {
-                    Display.Text += bb;
-                }
-                //それ以外の時はカーソルの後ろに追加
-                else
-                {
-                    Display.Text = Display.Text.Insert(cursorIndex, bb);
-                }
-            }
-            else
-            {
-                return;
-            }
-        
-        }
-     //パーセントを文字列Displayへ追加
-        public void AddPercent(string p)
-        {
-            // テキストボックスのカーソル位置を取得
-            int cursorIndex = Display.SelectionStart;
-
-            //演算子または前括弧またはピリオドが直前にあるまたは入力はじめの時
-            if (Display.Text[cursorIndex - 1] == '+'
-                || Display.Text[cursorIndex - 1] == '-'
-                || Display.Text[cursorIndex - 1] == '×'
-                || Display.Text[cursorIndex - 1] == '÷'
-                || Display.Text[cursorIndex - 1] == '('
-                || Display.Text[cursorIndex - 1] == '.'
-                || Display.Text[cursorIndex - 1] == '%'
-                || Display.Text.Length == 0)
-            {
-                return;
-            }
-            // カーソルが末尾にある場合はテキストを末尾に追加
-            else if (cursorIndex == Display.Text.Length)
-            {
-                Display.Text += p;
-            }
-            //Displayにカーソルがないとき末尾に追加
-            else if (cursorIndex == -1)
-            {
-                Display.Text += p;
-            }
-            //それ以外の時はカーソルの後ろに追加
-            else
-            {
-                Display.Text = Display.Text.Insert(cursorIndex, p);
-            }
-        }
         //イコール以降を文字列inputへ追加
         public void AddEqual(string eql, string res)
         {
             Display.Text += (eql + res);
 
         }
-
         //文字列inputを評価し数式としてListへ追加する
         public void UpdateDisplay(string txt)
         {
@@ -414,7 +360,7 @@ namespace DesktTopCalculator
                 if (IsNumeric(expression[i]))
                 {
                     decimal number = Convert.ToDecimal(expression[i]);
-                    expression[i] = number.ToString("N10");
+                    expression[i] = number.ToString("N0");
                 }
                 //ピリオドの数が不適切な時
                 else if (ContainsMultiplePeriods(expression[i]))
@@ -423,7 +369,7 @@ namespace DesktTopCalculator
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
 
-                }                
+                }
                 //パーセントかつ直前が数字だった時
                 else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
                 {
@@ -436,13 +382,12 @@ namespace DesktTopCalculator
                 }
             }
             //Listの要素を文字列へ再度代入
-            Display.Text = string.Concat(expression);            
+            Display.Text = string.Concat(expression);
         }
-
         //文字列が数値かを問う
         public static bool IsNumeric(string inp)
         {
-           return decimal.TryParse(inp, out _);
+            return decimal.TryParse(inp, out _);
         }
         //文字列の中にピリオドが2個以上含まれるかを問う
         public static bool ContainsMultiplePeriods(string inp)
@@ -452,6 +397,35 @@ namespace DesktTopCalculator
 
             // パターンにマッチするかどうかを確認
             return Regex.IsMatch(inp, pattern);
+        }
+        //計算結果から＝以降の文字列を取得しDisplayへ追加する
+        public void SelectResult()
+        {
+            // ＝のインデックスを取得
+            int index = Display.Text.IndexOf("=");
+
+            // ＝が見つかった場合、その位置以降の部分文字列を取得
+            if (index != -1)
+            {
+                // ＝の位置以降の部分文字列を取得
+                string selectresult = Display.Text.Substring(index + 1);
+                //リセット
+                ClearMethod();
+                //数値としてDisplayへ追加
+                AddDisplay(selectresult);
+            }
+        }
+
+        private void buttonKeep_Click(object sender, EventArgs e)
+        {
+            if(endflag == true)
+            {
+                KeepBox.Items.Add(Display.Text);
+            }
+            else
+            {
+                return;
+            }
         }
     }
 
@@ -515,6 +489,7 @@ namespace DesktTopCalculator
 
         }
     }
+
     public class KeepDate
     {
 

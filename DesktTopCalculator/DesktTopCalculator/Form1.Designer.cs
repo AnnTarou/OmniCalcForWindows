@@ -324,6 +324,7 @@
             buttonKeep.TabIndex = 43;
             buttonKeep.Text = "KEEP";
             buttonKeep.UseVisualStyleBackColor = false;
+            buttonKeep.Click += buttonKeep_Click;
             // 
             // buttonchardelete
             // 
@@ -345,6 +346,8 @@
             Display.ReadOnly = true;
             Display.Size = new Size(460, 101);
             Display.TabIndex = 48;
+            Display.Click += Display_Click;
+            Display.KeyDown += Display_KeyDown;
             // 
             // buttonreturn
             // 
