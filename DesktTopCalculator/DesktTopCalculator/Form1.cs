@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DesktTopCalculator
 {
@@ -16,10 +18,6 @@ namespace DesktTopCalculator
 
         //計算が終了したか？計算結果がでた時のみtrueになる
         public bool endflag = false;
-
-        //inputされた数式を評価して格納するためのList
-        List<string> expression;
-
 
         // カーソルの位置を追跡するための変数
         public int cursorPosition = 0;
@@ -232,14 +230,12 @@ namespace DesktTopCalculator
             }
             AddDisplay("%");
             UpdateDisplay(Display.Text);
-
         }
-
         //[＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
         {
             //計算のために文字列を新たに取得するメソッド
-            cl.Evaluate(expression);
+            cl.Evaluate(Display.Text);
             //計算メソッド
             cl.Calculate();
 
@@ -294,13 +290,67 @@ namespace DesktTopCalculator
         //[C]を押したとき
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
+            //Displayとフィールドの初期化
             ClearMethod();
         }
         //[AC]を押したとき
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
-            //※Keepするために使用していた配列も削除する予定！！
+            //Displayとフィールドの初期化
             ClearMethod();
+            //KeepBoxの初期化
+            KeepBox.Items.Clear();
+        }
+        //Keepボタンをクリックしたとき
+        private void buttonKeep_Click(object sender, EventArgs e)
+        {
+            if (endflag == true)
+            {
+                KeepBox.Items.Add(Display.Text);
+            }
+            else
+            {
+                return;
+            }
+        }
+        //Keepボタンをダブルクリックした時⇒Displayへ追加
+        private void KeepBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (KeepBox.SelectedItem == null)
+            {
+                return;
+            }
+            else if (Display.Text.Contains("="))
+            {
+                string selectedItem = KeepBox.SelectedItem.ToString();
+
+                // ＝のインデックスを検索
+                int indexOfEquals = selectedItem.IndexOf("=");
+
+                // ＝以降の文字列を取得
+                string resultString = selectedItem.Substring(indexOfEquals + 1);
+
+                //テキストボックスのとフィールドの初期化
+                ClearMethod();
+
+                // テキストボックスに表示
+                AddDisplay(resultString);
+                UpdateDisplay(Display.Text);
+            }
+            else
+            {
+                string selectedItem = KeepBox.SelectedItem.ToString();
+
+                // ＝のインデックスを検索
+                int indexOfEquals = selectedItem.IndexOf("=");
+
+                // ＝以降の文字列を取得
+                string resultString = selectedItem.Substring(indexOfEquals + 1);
+
+                // テキストボックスに表示
+                AddDisplay(resultString);
+                UpdateDisplay(Display.Text);
+            }
         }
         //初期値に戻すメソッド
         public void ClearMethod()
@@ -311,23 +361,12 @@ namespace DesktTopCalculator
             // Displayのクリア
             Display.Clear();
 
-            //Listのクリア
-            expression.Clear();
-
-            // イベントハンドラを削除
-            Display.KeyDown -= Display_KeyDown;
-            Display.Click -= Display_Click;
-
             //フィールド初期化            
             endflag = false;
             cursorPosition = 0;
         }
 
-        // 数字を文字列inputへ追加し、Displayへ表示させるメソッド
-        //※数値評価の時に0が先頭の場合を考慮する予定なのでここでは0の処理はせずに表示
-        //※すなわち0123のような表記を許容する
-        //※またピリオドの数も表記の時点では言及せず計算の時点でエラーメッセージを出す
-
+        //--------ここからメソッド--------
         //数字をDisplayへ追加
         public void AddDisplay(string buttonText)
         {
@@ -352,7 +391,7 @@ namespace DesktTopCalculator
             string input = txt.Replace(",", "");
 
             //正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
-            expression = Regex.Split(txt, @"(\D+)").ToList();
+            List<string>expression = Regex.Split(txt, @"(\D+)").ToList();
 
             for (int i = 0; i < expression.Count; i++)
             {
@@ -415,18 +454,6 @@ namespace DesktTopCalculator
                 AddDisplay(selectresult);
             }
         }
-
-        private void buttonKeep_Click(object sender, EventArgs e)
-        {
-            if(endflag == true)
-            {
-                KeepBox.Items.Add(Display.Text);
-            }
-            else
-            {
-                return;
-            }
-        }
     }
 
     //計算用のクラス
@@ -438,21 +465,22 @@ namespace DesktTopCalculator
         public string? resultnumber = "";
 
     //計算用に文字列を変換させ、不適切な入力に対しエラーを出す
-        public void Evaluate(List<string> list)
+        public void Evaluate(string txt)
         {
-           //計算用の文字列の作成
-            foreach (var item in list)
+            string str = txt.Replace(",", "");
+
+            for (int i = 0; i < str.Length; i++)
             {
-                switch (item)
+                switch (str[i])
                 {
-                    case "×":
+                    case '×':
                         formula += "*";                       
                         break;
-                    case "÷":
+                    case '÷':
                         formula += "/";
                         break;
                     default:
-                        formula += item;
+                        formula += str[i];
                         break;
                 }
             }
@@ -489,23 +517,10 @@ namespace DesktTopCalculator
 
         }
     }
+    //保存系のクラス
 
     public class KeepDate
     {
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

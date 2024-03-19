@@ -367,6 +367,7 @@
             KeepBox.Name = "KeepBox";
             KeepBox.Size = new Size(459, 154);
             KeepBox.TabIndex = 50;
+            KeepBox.DoubleClick += KeepBox_DoubleClick;
             // 
             // Form1
             // 
