@@ -1,6 +1,6 @@
 ﻿namespace DesktTopCalculator
 {
-    partial class Form1
+    partial class CalculatorForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -369,7 +369,7 @@
             KeepBox.TabIndex = 50;
             KeepBox.DoubleClick += KeepBox_DoubleClick;
             // 
-            // Form1
+            // CalculatorForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -404,7 +404,7 @@
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
-            Name = "Form1";
+            Name = "CalculatorForm";
             Text = "calculator";
             ResumeLayout(false);
             PerformLayout();

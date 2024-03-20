@@ -1,6 +1,5 @@
 using Antlr4.Runtime;
 using System.Linq.Expressions;
-using Dangl.Calculator;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace DesktTopCalculator
 {
-    public partial class Form1 : Form
+    public partial class CalculatorForm : Form
     {
         //計算式を表示するテキストボックスの名前はDisplay
         //Keepした計算式を入れるリストボックスの名前はKeepBox
@@ -23,16 +22,16 @@ namespace DesktTopCalculator
         public int cursorPosition = 0;
 
         //計算メソッドクラスのオブジェクト
-        Calc cl;
+        Calculation cl;
 
         //保存系メソッドクラスのオブジェクト
-        KeepDate kd;
+        TempStorage ts;
 
-        public Form1()
+        public CalculatorForm()
         {
             InitializeComponent();
-            cl = new Calc();
-            kd = new KeepDate();
+            cl = new Calculation();
+            ts = new TempStorage();
         }
 
         //------ここから各ボタンのイベントハンドラ-----------------
@@ -234,15 +233,23 @@ namespace DesktTopCalculator
         //[＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
         {
-            //計算のために文字列を新たに取得するメソッド
-            cl.Evaluate(Display.Text);
-            //計算メソッド
-            cl.Calculate();
+            //計算結果が出た後にイコールが押された場合
+            if (endflag)
+            {
+                return;
+            }
+            else
+            {
+                //計算のために文字列を新たに取得するメソッド
+                cl.Evaluate(Display.Text);
+                //計算メソッド
+                cl.Calculate();
 
-            AddEqual("=", cl.resultnumber);
-            UpdateDisplay(Display.Text);
-            //Keep,AC,Cしかボタンを押せないようにする
-            endflag = true;
+                AddEqual("=", cl.resultnumber);
+                UpdateDisplay(Display.Text);
+                //Keep,AC,Cしかボタンを押せないようにする
+                endflag = true;
+            }
         }
         //Displayがクリックされた時
         private void Display_Click(object sender, EventArgs e)
@@ -269,8 +276,13 @@ namespace DesktTopCalculator
         //[delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
+            //計算結果が出た後は何もしない
+            if (endflag)
+            {
+                return ;
+            }            
             //カーソルがなく文字列がある場合末尾より削除
-            if (cursorPosition == 0 && Display.Text.Length > 0)
+           else if (cursorPosition == 0 && Display.Text.Length > 0)
             {
                 Display.Text = Display.Text.Remove(Display.Text.Length - 1);
                 UpdateDisplay(Display.Text);
@@ -304,7 +316,7 @@ namespace DesktTopCalculator
         //Keepボタンをクリックしたとき
         private void buttonKeep_Click(object sender, EventArgs e)
         {
-            if (endflag == true)
+            if (endflag)
             {
                 KeepBox.Items.Add(Display.Text);
             }
@@ -321,52 +333,32 @@ namespace DesktTopCalculator
                 return;
             }
             else if (Display.Text.Contains("="))
-            {
-                string selectedItem = KeepBox.SelectedItem.ToString();
-
-                // ＝のインデックスを検索
-                int indexOfEquals = selectedItem.IndexOf("=");
-
-                // ＝以降の文字列を取得
-                string resultString = selectedItem.Substring(indexOfEquals + 1);
-
-                //テキストボックスのとフィールドの初期化
+            {            
+                //Displayとフィールドの初期化
                 ClearMethod();
 
-                // テキストボックスに表示
-                AddDisplay(resultString);
+                // DisplayにKeepの回答部分のみ追加
+                AddDisplay(ts.SelectResult(KeepBox));
                 UpdateDisplay(Display.Text);
             }
             else
             {
-                string selectedItem = KeepBox.SelectedItem.ToString();
-
-                // ＝のインデックスを検索
-                int indexOfEquals = selectedItem.IndexOf("=");
-
-                // ＝以降の文字列を取得
-                string resultString = selectedItem.Substring(indexOfEquals + 1);
-
-                // テキストボックスに表示
-                AddDisplay(resultString);
+                // DisplayにKeepの回答部分のみ追加
+                AddDisplay(ts.SelectResult(KeepBox));
                 UpdateDisplay(Display.Text);
             }
         }
         //初期値に戻すメソッド
         public void ClearMethod()
         {
-            //カーソルを非表示にする
-            Cursor.Hide();
-
             // Displayのクリア
             Display.Clear();
 
             //フィールド初期化            
             endflag = false;
             cursorPosition = 0;
+            cl.formula = "";
         }
-
-        //--------ここからメソッド--------
         //数字をDisplayへ追加
         public void AddDisplay(string buttonText)
         {
@@ -384,7 +376,7 @@ namespace DesktTopCalculator
             Display.Text += (eql + res);
 
         }
-        //文字列inputを評価し数式としてListへ追加する
+        //文字列を適切な形に変換してDisplayへ表示
         public void UpdateDisplay(string txt)
         {
             //Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
@@ -454,73 +446,5 @@ namespace DesktTopCalculator
                 AddDisplay(selectresult);
             }
         }
-    }
-
-    //計算用のクラス
-    public class Calc
-    {
-        //計算用の文字列を格納する
-        public string? formula = "";
-        //結果を格納する文字列
-        public string? resultnumber = "";
-
-    //計算用に文字列を変換させ、不適切な入力に対しエラーを出す
-        public void Evaluate(string txt)
-        {
-            string str = txt.Replace(",", "");
-
-            for (int i = 0; i < str.Length; i++)
-            {
-                switch (str[i])
-                {
-                    case '×':
-                        formula += "*";                       
-                        break;
-                    case '÷':
-                        formula += "/";
-                        break;
-                    default:
-                        formula += str[i];
-                        break;
-                }
-            }
-            //前括弧と後括弧の数が違う場合はエラー
-            if (!(IsBalanced(formula)))
-            {
-                MessageBox.Show("The number of parentheses() doesn't match", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return; 
-            }
-        }
-    //前括弧と後括弧の数が同じか調べる
-        public static bool IsBalanced(string f)
-    {
-        int openingCount = Regex.Matches(f, @"\(").Count;
-        int closingCount = Regex.Matches(f, @"\)").Count;
-        return openingCount == closingCount;
-    }
-
-    //計算メソッド
-    //https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
-        public void Calculate()
-        {
-            try
-            {
-                var result = Calculator.Calculate(formula);
-                resultnumber = result.Result.ToString();
-            }
-            catch
-            {
-                MessageBox.Show("Cannot be calculated", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-        }
-    }
-    //保存系のクラス
-
-    public class KeepDate
-    {
-
     }
 }
