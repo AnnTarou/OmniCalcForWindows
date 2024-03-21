@@ -279,10 +279,10 @@ namespace DesktTopCalculator
             //計算結果が出た後は何もしない
             if (endflag)
             {
-                return ;
-            }            
+                return;
+            }
             //カーソルがなく文字列がある場合末尾より削除
-           else if (cursorPosition == 0 && Display.Text.Length > 0)
+            else if (cursorPosition == 0 && Display.Text.Length > 0)
             {
                 Display.Text = Display.Text.Remove(Display.Text.Length - 1);
                 UpdateDisplay(Display.Text);
@@ -333,7 +333,7 @@ namespace DesktTopCalculator
                 return;
             }
             else if (Display.Text.Contains("="))
-            {            
+            {
                 //Displayとフィールドの初期化
                 ClearMethod();
 
@@ -347,6 +347,15 @@ namespace DesktTopCalculator
                 AddDisplay(ts.SelectResult(KeepBox));
                 UpdateDisplay(Display.Text);
             }
+        }
+        //KeepBoxの削除ボタンが押されたとき
+        private void このリストの削除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (KeepBox.SelectedItem != null)
+            {
+                KeepBox.Items.Remove(KeepBox.SelectedItem);
+            }
+
         }
         //初期値に戻すメソッド
         public void ClearMethod()
@@ -383,7 +392,7 @@ namespace DesktTopCalculator
             string input = txt.Replace(",", "");
 
             //正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
-            List<string>expression = Regex.Split(txt, @"(\D+)").ToList();
+            List<string> expression = Regex.Split(txt, @"(\D+)").ToList();
 
             for (int i = 0; i < expression.Count; i++)
             {
