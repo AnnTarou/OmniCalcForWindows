@@ -1,6 +1,6 @@
 ﻿namespace DesktTopCalculator
 {
-    partial class Form1
+    partial class CalculatorForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             button1 = new Button();
             buttonminus = new Button();
             buttonpuls = new Button();
@@ -55,6 +56,10 @@
             Display = new TextBox();
             buttonreturn = new Button();
             KeepBox = new ListBox();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            計算式へ追加ToolStripMenuItem = new ToolStripMenuItem();
+            このリストの削除ToolStripMenuItem = new ToolStripMenuItem();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -324,6 +329,7 @@
             buttonKeep.TabIndex = 43;
             buttonKeep.Text = "KEEP";
             buttonKeep.UseVisualStyleBackColor = false;
+            buttonKeep.Click += buttonKeep_Click;
             // 
             // buttonchardelete
             // 
@@ -345,6 +351,8 @@
             Display.ReadOnly = true;
             Display.Size = new Size(460, 101);
             Display.TabIndex = 48;
+            Display.Click += Display_Click;
+            Display.KeyDown += Display_KeyDown;
             // 
             // buttonreturn
             // 
@@ -358,14 +366,37 @@
             // 
             // KeepBox
             // 
+            KeepBox.ContextMenuStrip = contextMenuStrip1;
             KeepBox.FormattingEnabled = true;
             KeepBox.ItemHeight = 25;
             KeepBox.Location = new Point(13, 12);
             KeepBox.Name = "KeepBox";
             KeepBox.Size = new Size(459, 154);
             KeepBox.TabIndex = 50;
+            KeepBox.DoubleClick += KeepBox_DoubleClick;
             // 
-            // Form1
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(24, 24);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 計算式へ追加ToolStripMenuItem, このリストの削除ToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(241, 101);
+            // 
+            // 計算式へ追加ToolStripMenuItem
+            // 
+            計算式へ追加ToolStripMenuItem.Name = "計算式へ追加ToolStripMenuItem";
+            計算式へ追加ToolStripMenuItem.Size = new Size(240, 32);
+            計算式へ追加ToolStripMenuItem.Text = "Add to formula";
+            計算式へ追加ToolStripMenuItem.Click += KeepBox_DoubleClick;
+            // 
+            // このリストの削除ToolStripMenuItem
+            // 
+            このリストの削除ToolStripMenuItem.Name = "このリストの削除ToolStripMenuItem";
+            このリストの削除ToolStripMenuItem.Size = new Size(240, 32);
+            このリストの削除ToolStripMenuItem.Text = "Delete list";
+            このリストの削除ToolStripMenuItem.Click += このリストの削除ToolStripMenuItem_Click;
+            // 
+            // CalculatorForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -400,8 +431,9 @@
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
-            Name = "Form1";
+            Name = "CalculatorForm";
             Text = "calculator";
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -435,5 +467,8 @@
         private TextBox Display;
         private Button buttonreturn;
         private ListBox KeepBox;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem 計算式へ追加ToolStripMenuItem;
+        private ToolStripMenuItem このリストの削除ToolStripMenuItem;
     }
 }
