@@ -19,7 +19,7 @@ namespace DesktTopCalculator
         public bool endflag = false;
 
         // カーソルの位置を追跡するための変数
-        public int cursorPosition = 0;
+        public int cursorposition = 0;
 
         //計算メソッドクラスのオブジェクト
         Calculation cl;
@@ -255,13 +255,13 @@ namespace DesktTopCalculator
         private void Display_Click(object sender, EventArgs e)
         {
             //カーソル位置を取得
-            cursorPosition = Display.SelectionStart;
+            cursorposition = Display.SelectionStart;
         }
         //Displayにキーダウンがあった時
         private void Display_KeyDown(object sender, KeyEventArgs e)
         {
             //カーソル位置を取得
-            cursorPosition = Display.SelectionStart;
+            cursorposition = Display.SelectionStart;
             //右矢印キーが押されたとき
             if (e.KeyCode == Keys.Right)
             {
@@ -276,27 +276,35 @@ namespace DesktTopCalculator
         //[delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
+            //カーソル位置を取得
+            cursorposition = Display.SelectionStart;
+
             //計算結果が出た後は何もしない
             if (endflag)
             {
                 return;
             }
-            //カーソルがなく文字列がある場合末尾より削除
-            else if (cursorPosition == 0 && Display.Text.Length > 0)
-            {
-                Display.Text = Display.Text.Remove(Display.Text.Length - 1);
-                UpdateDisplay(Display.Text);
-            }
-            // カーソルがある場合はカーソルの左側の文字を削除
-            else if (cursorPosition > 0)
-            {
-                Display.Text = Display.Text.Remove(cursorPosition - 1, 1);
-                UpdateDisplay(Display.Text);
-            }
-            //文字列がない場合
-            else if ((cursorPosition <= 0) && (Display.Text.Length == 0))
+            //カーソル位置が0で文字列がある場合
+            else if (cursorposition == 0 && Display.Text.Length > 0)
             {
                 return;
+            }
+            //文字列がない場合
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            // カーソルがある場合
+            else if (cursorposition > 0)
+            {
+                //カーソルの左側一文字削除
+                Display.Text = Display.Text.Remove(cursorposition - 1, 1);
+                //Displayへ表示
+                UpdateDisplay(Display.Text);
+                //カーソルの位置を再度取得
+                cursorposition -= 1;
+                // テキストボックスのフォーカスを設定し、カーソルを表示
+                Display.Focus();
             }
         }
         //[C]を押したとき
@@ -365,18 +373,20 @@ namespace DesktTopCalculator
 
             //フィールド初期化            
             endflag = false;
-            cursorPosition = 0;
+            cursorposition = 0;
             cl.formula = "";
         }
-        //数字をDisplayへ追加
+        //ボタンのテキストをDisplayへ追加
         public void AddDisplay(string buttonText)
         {
-            Display.Text = Display.Text.Insert(cursorPosition, buttonText);
-            // カーソル位置を挿入した後の位置に移動
-            cursorPosition += buttonText.Length;
+            //カーソルの位置を取得
+            cursorposition = Display.SelectionStart;
+            //カーソル位置の直後にボタンテキストを追加
+            Display.Text = Display.Text.Insert(cursorposition, buttonText);
+            // カーソル位置を挿入したテキストの後ろへ移動
+            cursorposition += buttonText.Length;
             // テキストボックスのフォーカスを設定し、カーソルを表示
-            Display.Focus();
-            Display.SelectionStart = cursorPosition;
+            Display.Focus();           
         }
 
         //イコール以降を文字列inputへ追加
