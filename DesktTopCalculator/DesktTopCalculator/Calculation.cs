@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace DesktTopCalculator
 {
-    //計算用のクラス
+    // 計算用のクラス
     public class Calculation
     {
-        //計算用の文字列を格納する
+        // 計算用の文字列を格納する
         public string? formula = "";
-        //結果を格納する文字列
+        // 結果を格納する文字列
         public string? resultnumber = "";
 
-        //計算用に文字列を変換させ、不適切な入力に対しエラーを出す
+        // 計算用に文字列を変換させ、不適切な入力に対しエラーを出す
         public void Evaluate(string txt)
         {
             string str = txt.Replace(",", "");
@@ -36,7 +36,7 @@ namespace DesktTopCalculator
                         break;
                 }
             }
-            //前括弧と後括弧の数が違う場合はエラー
+            // 前括弧と後括弧の数が違う場合はエラー
             if (!(IsBalanced(formula)))
             {
                 MessageBox.Show("The number of parentheses() doesn't match", "Error",
@@ -44,7 +44,7 @@ namespace DesktTopCalculator
                 return;
             }
         }
-        //前括弧と後括弧の数が同じか調べる
+        // 前括弧と後括弧の数が同じか調べる
         public static bool IsBalanced(string f)
         {
             int openingCount = Regex.Matches(f, @"\(").Count;
@@ -52,8 +52,8 @@ namespace DesktTopCalculator
             return openingCount == closingCount;
         }
 
-        //計算メソッド
-        //https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
+        // 計算メソッド
+        // https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
         public void Calculate()
         {
             try
