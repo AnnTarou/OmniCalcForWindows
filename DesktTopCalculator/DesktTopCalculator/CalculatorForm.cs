@@ -373,12 +373,26 @@ namespace DesktTopCalculator
         }
         // ボタンのテキストをDisplayへ追加
         public void AddDisplay(string buttonText)
-        {
+        { 
+            // Display.Textが更新される前の値を一時保存
+            string tmpDisplayText = Display.Text;
+
             // カーソル位置の直後にボタンテキストを追加
             Display.Text = Display.Text.Insert(cursorposition, buttonText);
 
-            // カーソル位置を挿入したテキストの後ろへ移動
-            cursorposition += buttonText.Length;
+            // ボタンテキスト追加前のDisplay.Textが00～09以外の場合
+            if (!(tmpDisplayText == "0" && buttonText != "00"))
+            {
+                // カーソル位置を挿入したテキストの後ろへ移動
+                cursorposition += buttonText.Length;
+
+                // 上記の条件かつボタンテキスト追加前のDisplay.Textが空文字かつボタンテキストが"00"の場合
+                if (tmpDisplayText == "" && buttonText == "00")
+                {
+                    // カーソル位置を一つ前に戻す
+                    cursorposition--;
+                }
+            }
         }
 
         // イコール以降を文字列inputへ追加
