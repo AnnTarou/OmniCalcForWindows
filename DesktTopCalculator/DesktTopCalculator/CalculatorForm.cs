@@ -12,19 +12,19 @@ namespace DesktTopCalculator
 {
     public partial class CalculatorForm : Form
     {
-        //計算式を表示するテキストボックスの名前はDisplay
-        //Keepした計算式を入れるリストボックスの名前はKeepBox
+        // 計算式を表示するテキストボックスの名前はDisplay
+        // Keepした計算式を入れるリストボックスの名前はKeepBox
 
-        //計算が終了したか？計算結果がでた時のみtrueになる
+        // 計算が終了したか？計算結果がでた時のみtrueになる
         public bool endflag = false;
 
         // カーソルの位置を追跡するための変数
         public int cursorposition = 0;
 
-        //計算メソッドクラスのオブジェクト
+        // 計算メソッドクラスのオブジェクト
         Calculation cl;
 
-        //保存系メソッドクラスのオブジェクト
+        // 保存系メソッドクラスのオブジェクト
         TempStorage ts;
 
         public CalculatorForm()
@@ -36,7 +36,7 @@ namespace DesktTopCalculator
 
         //------ここから各ボタンのイベントハンドラ-----------------
 
-        //[0]を押したとき
+        // [0]を押したとき
         private void button0_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -46,7 +46,7 @@ namespace DesktTopCalculator
             AddDisplay("0");
             UpdateDisplay(Display.Text);
         }
-        //[1]を押したとき
+        // [1]を押したとき
         private void button1_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -56,7 +56,7 @@ namespace DesktTopCalculator
             AddDisplay("1");
             UpdateDisplay(Display.Text);
         }
-        //[2]を押したとき
+        // [2]を押したとき
         private void button2_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -66,7 +66,7 @@ namespace DesktTopCalculator
             AddDisplay("2");
             UpdateDisplay(Display.Text);
         }
-        //[3]を押したとき
+        // [3]を押したとき
         private void button3_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -76,7 +76,7 @@ namespace DesktTopCalculator
             AddDisplay("3");
             UpdateDisplay(Display.Text);
         }
-        //[4]を押したとき
+        // [4]を押したとき
         private void button4_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -86,7 +86,7 @@ namespace DesktTopCalculator
             AddDisplay("4");
             UpdateDisplay(Display.Text);
         }
-        //[5]を押したとき
+        // [5]を押したとき
         private void button5_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -96,7 +96,7 @@ namespace DesktTopCalculator
             AddDisplay("5");
             UpdateDisplay(Display.Text);
         }
-        //[6]を押したとき
+        // [6]を押したとき
         private void button6_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -106,7 +106,7 @@ namespace DesktTopCalculator
             AddDisplay("6");
             UpdateDisplay(Display.Text);
         }
-        //[7]を押したとき
+        // [7]を押したとき
         private void button7_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -116,7 +116,7 @@ namespace DesktTopCalculator
             AddDisplay("7");
             UpdateDisplay(Display.Text);
         }
-        //[8]を押したとき
+        // [8]を押したとき
         private void button8_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -126,7 +126,7 @@ namespace DesktTopCalculator
             AddDisplay("8");
             UpdateDisplay(Display.Text);
         }
-        //[9]を押したとき
+        // [9]を押したとき
         private void button9_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -136,7 +136,7 @@ namespace DesktTopCalculator
             AddDisplay("9");
             UpdateDisplay(Display.Text);
         }
-        //[00]を押したとき
+        // [00]を押したとき
         private void button00_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -147,7 +147,7 @@ namespace DesktTopCalculator
             AddDisplay("00");
             UpdateDisplay(Display.Text);
         }
-        //[.]を押したとき
+        // [.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -157,7 +157,7 @@ namespace DesktTopCalculator
             AddDisplay(".");
             UpdateDisplay(Display.Text);
         }
-        //[+]を押したとき
+        // [+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -167,7 +167,7 @@ namespace DesktTopCalculator
             AddDisplay("+");
             UpdateDisplay(Display.Text);
         }
-        //[-]を押したとき
+        // [-]を押したとき
         private void buttonminus_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -177,7 +177,7 @@ namespace DesktTopCalculator
             AddDisplay("-");
             UpdateDisplay(Display.Text);
         }
-        //[×]を押したとき
+        // [×]を押したとき
         private void buttonmultiply_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -187,7 +187,7 @@ namespace DesktTopCalculator
             AddDisplay("×");
             UpdateDisplay(Display.Text);
         }
-        //[÷]を押したとき
+        // [÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -197,7 +197,7 @@ namespace DesktTopCalculator
             AddDisplay("÷");
             UpdateDisplay(Display.Text);
         }
-        //[前括弧]を押したとき
+        // [前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -207,7 +207,7 @@ namespace DesktTopCalculator
             AddDisplay("(");
             UpdateDisplay(Display.Text);
         }
-        //[後括弧]を押したとき
+        // [後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -218,7 +218,7 @@ namespace DesktTopCalculator
             AddDisplay(")");
             UpdateDisplay(Display.Text);
         }
-        //[％]を押したとき
+        // [％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
         {
 
@@ -230,39 +230,39 @@ namespace DesktTopCalculator
             AddDisplay("%");
             UpdateDisplay(Display.Text);
         }
-        //[＝]を押したとき
+        // [＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
         {
-            //計算結果が出た後にイコールが押された場合
+            // 計算結果が出た後にイコールが押された場合
             if (endflag)
             {
                 return;
             }
             else
             {
-                //計算のために文字列を新たに取得するメソッド
+                // 計算のために文字列を新たに取得するメソッド
                 cl.Evaluate(Display.Text);
-                //計算メソッド
+                // 計算メソッド
                 cl.Calculate();
 
                 AddEqual("=", cl.resultnumber);
                 UpdateDisplay(Display.Text);
-                //Keep,AC,Cしかボタンを押せないようにする
+                // Keep,AC,Cしかボタンを押せないようにする
                 endflag = true;
             }
         }
-        //Displayがクリックされた時
+        // Displayがクリックされた時
         private void Display_Click(object sender, EventArgs e)
         {
-            //カーソル位置を取得
+            // カーソル位置を取得
             cursorposition = Display.SelectionStart;
         }
-        //Displayにキーダウンがあった時
+        // Displayにキーダウンがあった時
         private void Display_KeyDown(object sender, KeyEventArgs e)
         {
-            //カーソル位置を取得
+            // カーソル位置を取得
             cursorposition = Display.SelectionStart;
-            //右矢印キーが押されたとき
+            // 右矢印キーが押されたとき
             if (e.KeyCode == Keys.Right)
             {
                 // カーソルがテキストボックスの末尾にない場合は、カーソルを右にずらす
@@ -273,20 +273,20 @@ namespace DesktTopCalculator
                 }
             }
         }
-        //[delete]を押したとき
+        // [delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
-            //計算結果が出た後は何もしない
+            // 計算結果が出た後は何もしない
             if (endflag)
             {
                 return;
             }
-            //カーソル位置が0で文字列がある場合
+            // カーソル位置が0で文字列がある場合
             else if (cursorposition == 0 && Display.Text.Length > 0)
             {
                 return;
             }
-            //文字列がない場合
+            // 文字列がない場合
             else if (Display.Text.Length == 0)
             {
                 return;
@@ -294,29 +294,29 @@ namespace DesktTopCalculator
             // カーソルがある場合
             else if (cursorposition > 0)
             {
-                //カーソルの左側一文字削除
+                // カーソルの左側一文字削除
                 Display.Text = Display.Text.Remove(cursorposition - 1, 1);
-                //Displayへ表示
+                // Displayへ表示
                 UpdateDisplay(Display.Text);
-                //カーソルの位置を再度取得
+                // カーソルの位置を再度取得
                 cursorposition -= 1;
             }
         }
-        //[C]を押したとき
+        // [C]を押したとき
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
-            //Displayとフィールドの初期化
+            // Displayとフィールドの初期化
             ClearMethod();
         }
-        //[AC]を押したとき
+        // [AC]を押したとき
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
-            //Displayとフィールドの初期化
+            // Displayとフィールドの初期化
             ClearMethod();
-            //KeepBoxの初期化
+            // KeepBoxの初期化
             KeepBox.Items.Clear();
         }
-        //Keepボタンをクリックしたとき
+        // Keepボタンをクリックしたとき
         private void buttonKeep_Click(object sender, EventArgs e)
         {
             if (endflag)
@@ -328,7 +328,7 @@ namespace DesktTopCalculator
                 return;
             }
         }
-        //Keepボタンをダブルクリックした時⇒Displayへ追加
+        // Keepボタンをダブルクリックした時⇒Displayへ追加
         private void KeepBox_DoubleClick(object sender, EventArgs e)
         {
             if (KeepBox.SelectedItem == null)
@@ -337,7 +337,7 @@ namespace DesktTopCalculator
             }
             else if (Display.Text.Contains("="))
             {
-                //Displayとフィールドの初期化
+                // Displayとフィールドの初期化
                 ClearMethod();
 
                 // DisplayにKeepの回答部分のみ追加
@@ -351,7 +351,7 @@ namespace DesktTopCalculator
                 UpdateDisplay(Display.Text);
             }
         }
-        //KeepBoxの削除ボタンが押されたとき
+        // KeepBoxの削除ボタンが押されたとき
         private void このリストの削除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (KeepBox.SelectedItem != null)
@@ -360,50 +360,51 @@ namespace DesktTopCalculator
             }
 
         }
-        //初期値に戻すメソッド
+        // 初期値に戻すメソッド
         public void ClearMethod()
         {
             // Displayのクリア
             Display.Clear();
 
-            //フィールド初期化            
+            // フィールド初期化            
             endflag = false;
             cursorposition = 0;
             cl.formula = "";
         }
-        //ボタンのテキストをDisplayへ追加
+        // ボタンのテキストをDisplayへ追加
         public void AddDisplay(string buttonText)
         {
-            //カーソル位置の直後にボタンテキストを追加
+            // カーソル位置の直後にボタンテキストを追加
             Display.Text = Display.Text.Insert(cursorposition, buttonText);
+
             // カーソル位置を挿入したテキストの後ろへ移動
-            cursorposition += buttonText.Length;   
+            cursorposition += buttonText.Length;
         }
 
-        //イコール以降を文字列inputへ追加
+        // イコール以降を文字列inputへ追加
         public void AddEqual(string eql, string res)
         {
             Display.Text += (eql + res);
 
         }
-        //文字列を適切な形に変換してDisplayへ表示
+        // 文字列を適切な形に変換してDisplayへ表示
         public void UpdateDisplay(string txt)
         {
-            //Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
+            // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
             string input = txt.Replace(",", "");
 
-            //正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
+            // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
             List<string> expression = Regex.Split(input, @"(\D+)").ToList();
 
             for (int i = 0; i < expression.Count; i++)
             {
-                //数字の時
+                // 数字の時
                 if (IsNumeric(expression[i]))
                 {
                     decimal number = Convert.ToDecimal(expression[i]);
                     expression[i] = number.ToString("N0");
                 }
-                //ピリオドの数が不適切な時
+                // ピリオドの数が不適切な時
                 else if (ContainsMultiplePeriods(expression[i]))
                 {
                     MessageBox.Show("(.)Incorrect number of periods", "Error",
@@ -411,7 +412,7 @@ namespace DesktTopCalculator
                     return;
 
                 }
-                //パーセントかつ直前が数字だった時
+                // パーセントかつ直前が数字だった時
                 else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
                 {
                     decimal number = Convert.ToDecimal(expression[i - 1]);
@@ -422,15 +423,35 @@ namespace DesktTopCalculator
                     i--;
                 }
             }
-            //Listの要素を文字列へ再度代入
+
+            // Dssplay.Text更新前のコンマの数をカウント
+            int beforeCommaCount = Display.Text.Count(c => c == ',');
+
+            // Listの要素を文字列へ再度代入
             Display.Text = string.Concat(expression);
+
+            // Dssplay.Text更新後のコンマの数をカウント
+            int afterCommaCount = Display.Text.Count(c => c == ',');
+
+            // コンマの数が1つ増えた場合
+            if (afterCommaCount - beforeCommaCount == 1)
+            {
+                // カーソル位置を一つ後ろに移動
+                cursorposition++;
+            }
+            // コンマの数が1つ減った場合
+            else if (afterCommaCount - beforeCommaCount == -1)
+            {
+                // カーソル位置を一つ前に移動
+                cursorposition--;
+            }
         }
-        //文字列が数値かを問う
+        // 文字列が数値かを問う
         public static bool IsNumeric(string inp)
         {
             return decimal.TryParse(inp, out _);
         }
-        //文字列の中にピリオドが2個以上含まれるかを問う
+        // 文字列の中にピリオドが2個以上含まれるかを問う
         public static bool ContainsMultiplePeriods(string inp)
         {
             // 数字の中にピリオドが2個以上含まれる正規表現パターン
@@ -439,7 +460,7 @@ namespace DesktTopCalculator
             // パターンにマッチするかどうかを確認
             return Regex.IsMatch(inp, pattern);
         }
-        //計算結果から＝以降の文字列を取得しDisplayへ追加する
+        // 計算結果から＝以降の文字列を取得しDisplayへ追加する
         public void SelectResult()
         {
             // ＝のインデックスを取得
@@ -450,9 +471,9 @@ namespace DesktTopCalculator
             {
                 // ＝の位置以降の部分文字列を取得
                 string selectresult = Display.Text.Substring(index + 1);
-                //リセット
+                // リセット
                 ClearMethod();
-                //数値としてDisplayへ追加
+                // 数値としてDisplayへ追加
                 AddDisplay(selectresult);
             }
         }
