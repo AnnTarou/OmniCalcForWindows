@@ -260,16 +260,22 @@ namespace DesktTopCalculator
         // Displayにキーダウンがあった時
         private void Display_KeyDown(object sender, KeyEventArgs e)
         {
-            // カーソル位置を取得
-            cursorposition = Display.SelectionStart;
             // 右矢印キーが押されたとき
             if (e.KeyCode == Keys.Right)
             {
                 // カーソルがテキストボックスの末尾にない場合は、カーソルを右にずらす
                 if (Display.SelectionStart < Display.Text.Length)
                 {
-                    Display.SelectionStart++;
-                    Display.SelectionLength = 0;
+                    cursorposition++;
+                }
+            }
+            // 左矢印キーが押されたとき
+            else if (e.KeyCode == Keys.Left)
+            {
+                // カーソルがテキストボックスの先頭にない場合は、カーソルを左にずらす
+                if (Display.SelectionStart != 0)
+                {
+                    cursorposition--;
                 }
             }
         }
