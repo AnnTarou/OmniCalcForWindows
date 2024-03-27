@@ -411,7 +411,7 @@ namespace DesktTopCalculator
         public void UpdateDisplay(string txt)
         {
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
-            string input = txt.Replace(",", "");
+            string input = txt.Replace(",","");
 
             // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
             List<string> expression = Regex.Split(input, @"(\D+)").ToList();

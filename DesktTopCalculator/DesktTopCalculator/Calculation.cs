@@ -45,16 +45,40 @@ namespace DesktTopCalculator
             }
         }
         // 前括弧と後括弧の数が同じか調べる
-        public static bool IsBalanced(string f)
+         static bool IsBalanced(string formula)
         {
-            int openingCount = Regex.Matches(f, @"\(").Count;
-            int closingCount = Regex.Matches(f, @"\)").Count;
-            return openingCount == closingCount;
-        }
+            Stack<char> stack = new Stack<char>();
 
-        // 計算メソッド
-        // https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
-        public void Calculate()
+            foreach (char c in formula)
+            {
+                if (c == '(')
+                {
+                    stack.Push(c);
+                }
+                else if (c == ')')
+                {
+                    // 閉じ括弧が現れたが、対応する開き括弧がスタックにない場合
+                    if (stack.Count == 0 )
+                    { 
+                        return false;
+                    }
+                    stack.Pop();
+                }
+            }
+
+            // 最終的にスタックが空であれば、すべての開き括弧が閉じられている
+           if(stack.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+         }
+            // 計算メソッド
+            // https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
+         public void Calculate()
         {
             try
             {
