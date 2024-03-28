@@ -240,15 +240,20 @@ namespace DesktTopCalculator
             }
             else
             {
-                // 計算のために文字列を新たに取得するメソッド
-                cl.Evaluate(Display.Text);
-                // 計算メソッド
-                cl.Calculate();
-
-                AddEqual("=", cl.resultnumber);
-                UpdateDisplay(Display.Text);
-                // Keep,AC,Cしかボタンを押せないようにする
-                endflag = true;
+                // 数式評価でエラーがなければ
+                if (cl.CheckFormula(cl.Evaluate(Display.Text)))
+                {
+                    // 計算メソッド
+                    cl.Calculate();
+                    AddEqual("=", cl.resultnumber);
+                    UpdateDisplay(Display.Text);
+                    // Keep,AC,Cしかボタンを押せないようにする
+                    endflag = true;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
         // Displayがクリックされた時
@@ -414,7 +419,7 @@ namespace DesktTopCalculator
             string input = txt.Replace(",","");
 
             // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
-            List<string> expression = Regex.Split(input, @"(\D+)").ToList();
+            List<string> expression = Regex.Split(input, @"[^\D\.]").ToList();
 
             for (int i = 0; i < expression.Count; i++)
             {
@@ -475,7 +480,7 @@ namespace DesktTopCalculator
         public static bool ContainsMultiplePeriods(string inp)
         {
             // 数字の中にピリオドが2個以上含まれる正規表現パターン
-            string pattern = @"\d+\.\d+\.\d+";
+            string pattern = @"\d*\.\d+\.";
 
             // パターンにマッチするかどうかを確認
             return Regex.IsMatch(inp, pattern);
