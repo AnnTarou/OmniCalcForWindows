@@ -48,7 +48,7 @@ namespace DesktTopCalculator
                 return false;               
             }
             // 演算子から文字列が始まる場合
-            if (Regex.IsMatch(formula, @"^[+\-\*\/\.\%\)]"))
+            if (Regex.IsMatch(formula, @"^[\*\/\.\%\)]"))
             {
                 MessageBox.Show("formula is incorrect", "Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
