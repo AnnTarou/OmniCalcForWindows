@@ -245,10 +245,20 @@ namespace DesktTopCalculator
                 {
                     // 計算メソッド
                     cl.Calculate();
-                    AddEqual("=", cl.resultnumber);
-                    UpdateDisplay(Display.Text);
-                    // Keep,AC,Cしかボタンを押せないようにする
-                    endflag = true;
+
+                    if(cl.resultnumber == "NaN" || cl.resultnumber == "∞"|| string.IsNullOrEmpty(cl.resultnumber))
+                    {
+                        MessageBox.Show("Can't calculate", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    else
+                    {
+                        AddEqual("=", cl.resultnumber);
+                        UpdateDisplay(Display.Text);
+                        // Keep,AC,Cしかボタンを押せないようにする
+                        endflag = true;
+                    }
                 }
                 else
                 {

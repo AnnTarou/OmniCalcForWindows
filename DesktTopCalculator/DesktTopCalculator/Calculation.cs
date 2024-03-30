@@ -121,16 +121,8 @@ namespace DesktTopCalculator
          // 計算メソッド
          public void Calculate()
         {
-            try
-            {
-                var result = Calculator.Calculate(formula);
-                resultnumber = result.Result.ToString();
-            }
-            catch
-            {
-                MessageBox.Show("Cannot be calculated", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            var result = Calculator.Calculate(formula);
+            resultnumber = result.Result.ToString();
 
         }
     }
