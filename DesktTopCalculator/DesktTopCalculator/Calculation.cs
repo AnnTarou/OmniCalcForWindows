@@ -16,8 +16,8 @@ namespace DesktTopCalculator
         // 結果を格納する文字列
         public string? resultnumber = "";
 
-        // 計算用に文字列を変換させ、不適切な入力に対しエラーを出す
-        public void Evaluate(string txt)
+        // 計算用に文字列を変換
+        public string Evaluate(string txt)
         {
             string str = txt.Replace(",", "");
 
@@ -36,25 +36,90 @@ namespace DesktTopCalculator
                         break;
                 }
             }
-            // 前括弧と後括弧の数が違う場合はエラー
-            if (!(IsBalanced(formula)))
+            return formula;
+        }
+        public bool CheckFormula(string formula)
+        {
+            // 演算子等が重ねて入力されている場合
+            if(Regex.IsMatch(formula, @"[+\-\*\/\%\.]{2,20}"))
             {
-                MessageBox.Show("The number of parentheses() doesn't match", "Error",
+                MessageBox.Show("formula is incorrect", "Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                return false;               
+            }
+            // 演算子から文字列が始まる場合
+            if (Regex.IsMatch(formula, @"^[\*\/\.\%\)]"))
+            {
+                MessageBox.Show("formula is incorrect", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            // 数字の中にピリオドが複数ある場合
+            if (Regex.IsMatch(formula, @"\d*\.\d+\."))
+            {
+                MessageBox.Show("Check the number of periods", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            // 前括弧の直後に演算子やピリオド、後括弧がある場合
+            if (Regex.IsMatch(formula, @"\((?=[+\-\*\/\.\)])"))
+            {
+                MessageBox.Show("formula is incorrect", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            // 後括弧の直後に数字またはピリオドがある場合
+            if (Regex.IsMatch(formula, @"\)(?=[\d\%\.])"))
+            {
+                MessageBox.Show("formula is incorrect", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            // 括弧の数が均等でなかったら
+            if(IsBalanced(formula) == false)
+            {
+                MessageBox.Show("formula is incorrect", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         // 前括弧と後括弧の数が同じか調べる
-        public static bool IsBalanced(string f)
+         static bool IsBalanced(string formula)
         {
-            int openingCount = Regex.Matches(f, @"\(").Count;
-            int closingCount = Regex.Matches(f, @"\)").Count;
-            return openingCount == closingCount;
-        }
+            Stack<char> stack = new Stack<char>();
 
-        // 計算メソッド
-        // https://docs.dangl-it.com/Projects/Dangl.Calculator/1.2.0/index.html
-        public void Calculate()
+            foreach (char c in formula)
+            {
+                if (c == '(')
+                {
+                    stack.Push(c);
+                }
+                else if (c == ')')
+                {
+                    // 閉じ括弧が現れたが、対応する開き括弧がスタックにない場合
+                    if (stack.Count == 0 )
+                    { 
+                        return false;
+                    }
+                    stack.Pop();
+                }
+            }
+            // 最終的にスタックが空であれば、すべての開き括弧が閉じられている
+           if(stack.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+         }
+         // 計算メソッド
+         public void Calculate()
         {
             try
             {
