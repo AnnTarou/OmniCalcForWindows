@@ -419,49 +419,65 @@ namespace DesktTopCalculator
             string input = txt.Replace(",","");
 
             // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
-            List<string> expression = Regex.Split(input, @"(\D+)").ToList();
+            List<string> expression = Regex.Split(input, @"([^0-9\.]+)").ToList();
 
-            for (int i = 0; i < expression.Count; i++)
+            // expressionが空でない場合は、最後の要素を取得し、空の場合は空文字列を代入する
+            string endExpression = expression.Count > 0 ? expression[expression.Count - 1] : "";
+
+            // endExpressionがnullでなく、かつ最後の文字がピリオドでない場合に処理を実行する
+            // または、endExpressionが空の場合も処理を実行する
+            if (!string.IsNullOrEmpty(endExpression) && endExpression[endExpression.Length - 1] != '.' || string.IsNullOrEmpty(endExpression))
             {
-                // 数字の時
-                if (IsNumeric(expression[i]))
+                for (int i = 0; i < expression.Count; i++)
                 {
-                    decimal number = Convert.ToDecimal(expression[i]);
-                    expression[i] = number.ToString("N0");
-                }                
-                // パーセントかつ直前が数字だった時
-                else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
+                    // 空文字の場合ブレーク
+                    if (string.IsNullOrEmpty(expression[i]))
+                    {
+                        break;
+                    }
+
+                    // 数字の時
+                    if (IsNumeric(expression[i]))
+                    {
+                        decimal number = Convert.ToDecimal(expression[i]);
+                        expression[i] = number.ToString("#,##0.############");
+                    }
+                    // パーセントかつ直前が数字だった時
+                    else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
+                    {
+                        decimal number = Convert.ToDecimal(expression[i - 1]);
+                        decimal answer = number * 0.01m;
+                        expression[i - 1] = answer.ToString("#,##0.############");
+                        expression.RemoveAt(i);
+                        i--;
+                    }
+                }
+
+
+                // Dssplay.Text更新前のコンマの数をカウント
+                int beforeCommaCount = Display.Text.Count(c => c == ',');
+
+                // Listの要素を文字列へ再度代入
+                Display.Text = string.Concat(expression);
+
+                // Dssplay.Text更新後のコンマの数をカウント
+                int afterCommaCount = Display.Text.Count(c => c == ',');
+
+                // コンマの数が1つ増えた場合
+                if (afterCommaCount - beforeCommaCount == 1)
                 {
-                    decimal number = Convert.ToDecimal(expression[i - 1]);
-                    decimal answer = number * 0.01m;
-                    expression[i - 1] = answer.ToString("#,##0.##########");
-                    expression.RemoveAt(i);
-                    i--;
+                    // カーソル位置を一つ後ろに移動
+                    cursorposition++;
+                }
+                // コンマの数が1つ減った場合
+                else if (afterCommaCount - beforeCommaCount == -1)
+                {
+                    // カーソル位置を一つ前に移動
+                    cursorposition--;
                 }
             }
-
-            // Dssplay.Text更新前のコンマの数をカウント
-            int beforeCommaCount = Display.Text.Count(c => c == ',');
-
-            // Listの要素を文字列へ再度代入
-            Display.Text = string.Concat(expression);
-
-            // Dssplay.Text更新後のコンマの数をカウント
-            int afterCommaCount = Display.Text.Count(c => c == ',');
-
-            // コンマの数が1つ増えた場合
-            if (afterCommaCount - beforeCommaCount == 1)
-            {
-                // カーソル位置を一つ後ろに移動
-                cursorposition++;
-            }
-            // コンマの数が1つ減った場合
-            else if (afterCommaCount - beforeCommaCount == -1)
-            {
-                // カーソル位置を一つ前に移動
-                cursorposition--;
-            }
         }
+
         // 文字列が数値かを問う
         public static bool IsNumeric(string inp)
         {
