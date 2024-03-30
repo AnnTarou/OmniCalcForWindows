@@ -240,15 +240,20 @@ namespace DesktTopCalculator
             }
             else
             {
-                // 計算のために文字列を新たに取得するメソッド
-                cl.Evaluate(Display.Text);
-                // 計算メソッド
-                cl.Calculate();
-
-                AddEqual("=", cl.resultnumber);
-                UpdateDisplay(Display.Text);
-                // Keep,AC,Cしかボタンを押せないようにする
-                endflag = true;
+                // 数式評価でエラーがなければ
+                if (cl.CheckFormula(cl.Evaluate(Display.Text)))
+                {
+                    // 計算メソッド
+                    cl.Calculate();
+                    AddEqual("=", cl.resultnumber);
+                    UpdateDisplay(Display.Text);
+                    // Keep,AC,Cしかボタンを押せないようにする
+                    endflag = true;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
         // Displayがクリックされた時
@@ -411,7 +416,7 @@ namespace DesktTopCalculator
         public void UpdateDisplay(string txt)
         {
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
-            string input = txt.Replace(",", "");
+            string input = txt.Replace(",","");
 
             // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
             List<string> expression = Regex.Split(input, @"(\D+)").ToList();
@@ -423,22 +428,13 @@ namespace DesktTopCalculator
                 {
                     decimal number = Convert.ToDecimal(expression[i]);
                     expression[i] = number.ToString("N0");
-                }
-                // ピリオドの数が不適切な時
-                else if (ContainsMultiplePeriods(expression[i]))
-                {
-                    MessageBox.Show("(.)Incorrect number of periods", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-
-                }
+                }                
                 // パーセントかつ直前が数字だった時
                 else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
                 {
                     decimal number = Convert.ToDecimal(expression[i - 1]);
                     decimal answer = number * 0.01m;
                     expression[i - 1] = answer.ToString("#,##0.##########");
-                    // % を削除する
                     expression.RemoveAt(i);
                     i--;
                 }
@@ -471,15 +467,7 @@ namespace DesktTopCalculator
         {
             return decimal.TryParse(inp, out _);
         }
-        // 文字列の中にピリオドが2個以上含まれるかを問う
-        public static bool ContainsMultiplePeriods(string inp)
-        {
-            // 数字の中にピリオドが2個以上含まれる正規表現パターン
-            string pattern = @"\d+\.\d+\.\d+";
-
-            // パターンにマッチするかどうかを確認
-            return Regex.IsMatch(inp, pattern);
-        }
+        
         // 計算結果から＝以降の文字列を取得しDisplayへ追加する
         public void SelectResult()
         {
