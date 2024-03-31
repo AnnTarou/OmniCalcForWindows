@@ -53,7 +53,7 @@ namespace DesktTopCalculator
             return storageStack.Pop();
         }
 
-        // スタックからDisplay.Textを取り出す
+        // スタックからカーソル位置を取り出す
         public int PopCursoulPosition()
         {
             // 一番上のカーソル位置を取り出す
