@@ -7,6 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Net.Mime.MediaTypeNames;
+using System.Data.SqlTypes;
 
 namespace DesktTopCalculator
 {
@@ -32,6 +33,7 @@ namespace DesktTopCalculator
             InitializeComponent();
             cl = new Calculation();
             ts = new TempStorage();
+            ts.PushInitialValue();
         }
 
         //------ここから各ボタンのイベントハンドラ-----------------
@@ -45,6 +47,8 @@ namespace DesktTopCalculator
             }
             AddDisplay("0");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
+
         }
         // [1]を押したとき
         private void button1_Click(object sender, EventArgs e)
@@ -55,6 +59,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("1");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [2]を押したとき
         private void button2_Click(object sender, EventArgs e)
@@ -65,6 +70,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("2");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [3]を押したとき
         private void button3_Click(object sender, EventArgs e)
@@ -75,6 +81,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("3");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [4]を押したとき
         private void button4_Click(object sender, EventArgs e)
@@ -85,6 +92,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("4");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [5]を押したとき
         private void button5_Click(object sender, EventArgs e)
@@ -95,6 +103,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("5");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [6]を押したとき
         private void button6_Click(object sender, EventArgs e)
@@ -105,6 +114,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("6");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [7]を押したとき
         private void button7_Click(object sender, EventArgs e)
@@ -115,6 +125,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("7");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [8]を押したとき
         private void button8_Click(object sender, EventArgs e)
@@ -125,6 +136,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("8");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [9]を押したとき
         private void button9_Click(object sender, EventArgs e)
@@ -135,6 +147,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("9");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [00]を押したとき
         private void button00_Click(object sender, EventArgs e)
@@ -146,6 +159,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("00");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
@@ -156,6 +170,7 @@ namespace DesktTopCalculator
             }
             AddDisplay(".");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
@@ -166,6 +181,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("+");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [-]を押したとき
         private void buttonminus_Click(object sender, EventArgs e)
@@ -176,6 +192,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("-");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [×]を押したとき
         private void buttonmultiply_Click(object sender, EventArgs e)
@@ -186,6 +203,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("×");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
@@ -196,6 +214,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("÷");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
@@ -206,6 +225,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("(");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
@@ -217,6 +237,7 @@ namespace DesktTopCalculator
             }
             AddDisplay(")");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
@@ -229,6 +250,7 @@ namespace DesktTopCalculator
             }
             AddDisplay("%");
             UpdateDisplay(Display.Text);
+            ts.TempStack(Display.Text, cursorposition);
         }
         // [＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
@@ -246,7 +268,7 @@ namespace DesktTopCalculator
                     // 計算メソッド
                     cl.Calculate();
 
-                    if(cl.resultnumber == "NaN" || cl.resultnumber == "∞"|| string.IsNullOrEmpty(cl.resultnumber))
+                    if (cl.resultnumber == "NaN" || cl.resultnumber == "∞" || string.IsNullOrEmpty(cl.resultnumber))
                     {
                         MessageBox.Show("Can't calculate", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -321,7 +343,31 @@ namespace DesktTopCalculator
                 UpdateDisplay(Display.Text);
                 // カーソルの位置を再度取得
                 cursorposition -= 1;
+                ts.TempStack(Display.Text, cursorposition);
             }
+        }
+        // [return]を押したとき
+        private void buttonreturn_Click(object sender, EventArgs e)
+        {
+            // 計算結果が出た後は何もしない
+            if (endflag)
+            {
+                return;
+            }
+            // スタックが実質空の時
+            else if (ts.storageStack.Count==1 || ts.storageStackIndex.Count == 1)
+            {
+                return;
+            }
+            // スタックに要素がある場合はそれぞれの値を取り出して代入
+            else
+            {
+                Display.Text = ts.PopDisplayText();
+                cursorposition = ts.PopCursoulPosition();
+                // 元に戻した後のDisplay.Textとカーソル位置をスタックへ積む
+                ts.TempStack(Display.Text, cursorposition);
+            }
+            
         }
         // [C]を押したとき
         private void buttonTextClear_Click(object sender, EventArgs e)
@@ -379,6 +425,10 @@ namespace DesktTopCalculator
             {
                 KeepBox.Items.Remove(KeepBox.SelectedItem);
             }
+            else
+            {
+                return;
+            }
 
         }
         // 初期値に戻すメソッド
@@ -391,10 +441,15 @@ namespace DesktTopCalculator
             endflag = false;
             cursorposition = 0;
             cl.formula = "";
+
+            //スタックのクリア
+            ts.ClearStack();
+            // スタックの初期化
+            ts.PushInitialValue();
         }
         // ボタンのテキストをDisplayへ追加
         public void AddDisplay(string buttonText)
-        { 
+        {
             // Display.Textが更新される前の値を一時保存
             string tmpDisplayText = Display.Text;
 
@@ -426,7 +481,7 @@ namespace DesktTopCalculator
         public void UpdateDisplay(string txt)
         {
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
-            string input = txt.Replace(",","");
+            string input = txt.Replace(",", "");
 
             // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
             List<string> expression = Regex.Split(input, @"([^0-9\.]+)").ToList();
@@ -493,7 +548,7 @@ namespace DesktTopCalculator
         {
             return decimal.TryParse(inp, out _);
         }
-        
+
         // 計算結果から＝以降の文字列を取得しDisplayへ追加する
         public void SelectResult()
         {
