@@ -363,6 +363,7 @@
             buttonreturn.TabIndex = 49;
             buttonreturn.Text = "Return";
             buttonreturn.UseVisualStyleBackColor = true;
+            buttonreturn.Click += buttonreturn_Click;
             // 
             // KeepBox
             // 
@@ -380,19 +381,19 @@
             contextMenuStrip1.ImageScalingSize = new Size(24, 24);
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 計算式へ追加ToolStripMenuItem, このリストの削除ToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(241, 101);
+            contextMenuStrip1.Size = new Size(208, 68);
             // 
             // 計算式へ追加ToolStripMenuItem
             // 
             計算式へ追加ToolStripMenuItem.Name = "計算式へ追加ToolStripMenuItem";
-            計算式へ追加ToolStripMenuItem.Size = new Size(240, 32);
+            計算式へ追加ToolStripMenuItem.Size = new Size(207, 32);
             計算式へ追加ToolStripMenuItem.Text = "Add to formula";
             計算式へ追加ToolStripMenuItem.Click += KeepBox_DoubleClick;
             // 
             // このリストの削除ToolStripMenuItem
             // 
             このリストの削除ToolStripMenuItem.Name = "このリストの削除ToolStripMenuItem";
-            このリストの削除ToolStripMenuItem.Size = new Size(240, 32);
+            このリストの削除ToolStripMenuItem.Size = new Size(207, 32);
             このリストの削除ToolStripMenuItem.Text = "Delete list";
             このリストの削除ToolStripMenuItem.Click += このリストの削除ToolStripMenuItem_Click;
             // 
