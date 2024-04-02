@@ -157,9 +157,16 @@ namespace DesktTopCalculator
                 ClearMethod();
                 return;
             }
-            AddDisplay("00");
-            UpdateDisplay(Display.Text);
-            ts.TempStack(Display.Text, cursorposition);
+            else if(Display.Text.Length == 0)
+            {
+                return;
+            }
+            else
+            {
+                AddDisplay("00");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
         }
         // [.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
@@ -168,9 +175,18 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
-            AddDisplay(".");
-            UpdateDisplay(Display.Text);
-            ts.TempStack(Display.Text, cursorposition);
+            else if (Display.Text.Length == 0)
+            {
+                AddDisplay("0.");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
+            else
+            {
+                AddDisplay(".");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
         }
         // [+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
@@ -178,6 +194,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
+            }
+            else if(Display.Text.Length == 0)
+            {
+                return;
             }
             AddDisplay("+");
             UpdateDisplay(Display.Text);
@@ -190,6 +210,10 @@ namespace DesktTopCalculator
             {
                 SelectResult();
             }
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
             AddDisplay("-");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -200,10 +224,15 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
+                            }
+            else if (Display.Text.Length == 0)
+            {
+                return;
             }
             AddDisplay("×");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
+        
         }
         // [÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
@@ -212,6 +241,11 @@ namespace DesktTopCalculator
             {
                 SelectResult();
             }
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else
             AddDisplay("÷");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -235,9 +269,16 @@ namespace DesktTopCalculator
                 SelectResult();
                 return;
             }
-            AddDisplay(")");
-            UpdateDisplay(Display.Text);
-            ts.TempStack(Display.Text, cursorposition);
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else
+            {
+                AddDisplay(")");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
         }
         // [％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
@@ -246,7 +287,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
-                return;
+            }
+            else if(Display.Text.Length == 0) 
+            {
+                return;            
             }
             AddDisplay("%");
             UpdateDisplay(Display.Text);
@@ -480,6 +524,9 @@ namespace DesktTopCalculator
         // 文字列を適切な形に変換してDisplayへ表示
         public void UpdateDisplay(string txt)
         {
+            // 現在のカーソル位置より後ろの文字列数を取得
+            int aftercursolstr = Display.Text.Substring(cursorposition).Length;
+
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
             string input = txt.Replace(",", "");
 
@@ -505,7 +552,7 @@ namespace DesktTopCalculator
                     if (IsNumeric(expression[i]))
                     {
                         decimal number = Convert.ToDecimal(expression[i]);
-                        expression[i] = number.ToString("#,##0.############");
+                        expression[i] = number.ToString("#,##0.############");                        
                     }
                     // パーセントかつ直前が数字だった時
                     else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
@@ -514,32 +561,17 @@ namespace DesktTopCalculator
                         decimal answer = number * 0.01m;
                         expression[i - 1] = answer.ToString("#,##0.############");
                         expression.RemoveAt(i);
-                        i--;
+                        // 計算後の文字列の長さから計算前の文字列の長さを引いた数分カーソル位置を移動
+                        cursorposition += (expression[i - 1].Length -cursorposition);
                     }
                 }
-
-
-                // Dssplay.Text更新前のコンマの数をカウント
-                int beforeCommaCount = Display.Text.Count(c => c == ',');
-
-                // Listの要素を文字列へ再度代入
-                Display.Text = string.Concat(expression);
-
-                // Dssplay.Text更新後のコンマの数をカウント
-                int afterCommaCount = Display.Text.Count(c => c == ',');
-
-                // コンマの数が1つ増えた場合
-                if (afterCommaCount - beforeCommaCount == 1)
-                {
-                    // カーソル位置を一つ後ろに移動
-                    cursorposition++;
-                }
-                // コンマの数が1つ減った場合
-                else if (afterCommaCount - beforeCommaCount == -1)
-                {
-                    // カーソル位置を一つ前に移動
-                    cursorposition--;
-                }
+            }
+            // Listの要素を文字列へ再度代入
+            Display.Text = string.Concat(expression);
+            // 変換前のカーソルの後の文字列が返還後の文字列と変わっていた場合
+            if(aftercursolstr != Display.Text.Substring(cursorposition).Length)
+            {
+                cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
             }
         }
 
