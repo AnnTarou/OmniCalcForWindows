@@ -157,9 +157,16 @@ namespace DesktTopCalculator
                 ClearMethod();
                 return;
             }
-            AddDisplay("00");
-            UpdateDisplay(Display.Text);
-            ts.TempStack(Display.Text, cursorposition);
+            else if(Display.Text.Length == 0)
+            {
+                return;
+            }
+            else
+            {
+                AddDisplay("00");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
         }
         // [.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
@@ -168,9 +175,18 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
-            AddDisplay(".");
-            UpdateDisplay(Display.Text);
-            ts.TempStack(Display.Text, cursorposition);
+            else if (Display.Text.Length == 0)
+            {
+                AddDisplay("0.");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
+            else
+            {
+                AddDisplay(".");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
         }
         // [+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
@@ -178,6 +194,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
+            }
+            else if(Display.Text.Length == 0)
+            {
+                return;
             }
             AddDisplay("+");
             UpdateDisplay(Display.Text);
@@ -190,6 +210,10 @@ namespace DesktTopCalculator
             {
                 SelectResult();
             }
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
             AddDisplay("-");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -200,10 +224,15 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
+                            }
+            else if (Display.Text.Length == 0)
+            {
+                return;
             }
             AddDisplay("×");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
+        
         }
         // [÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
@@ -212,6 +241,11 @@ namespace DesktTopCalculator
             {
                 SelectResult();
             }
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else
             AddDisplay("÷");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -235,9 +269,16 @@ namespace DesktTopCalculator
                 SelectResult();
                 return;
             }
-            AddDisplay(")");
-            UpdateDisplay(Display.Text);
-            ts.TempStack(Display.Text, cursorposition);
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else
+            {
+                AddDisplay(")");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
+            }
         }
         // [％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
@@ -246,7 +287,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
-                return;
+            }
+            else if(Display.Text.Length == 0) 
+            {
+                return;            
             }
             AddDisplay("%");
             UpdateDisplay(Display.Text);
@@ -339,10 +383,10 @@ namespace DesktTopCalculator
             {
                 // カーソルの左側一文字削除
                 Display.Text = Display.Text.Remove(cursorposition - 1, 1);
-                // Displayへ表示
-                UpdateDisplay(Display.Text);
                 // カーソルの位置を再度取得
                 cursorposition -= 1;
+                // Displayへ表示
+                UpdateDisplay(Display.Text);
                 ts.TempStack(Display.Text, cursorposition);
             }
         }
@@ -456,19 +500,8 @@ namespace DesktTopCalculator
             // カーソル位置の直後にボタンテキストを追加
             Display.Text = Display.Text.Insert(cursorposition, buttonText);
 
-            // ボタンテキスト追加前のDisplay.Textが00～09以外の場合
-            if (!(tmpDisplayText == "0" && buttonText != "00"))
-            {
-                // カーソル位置を挿入したテキストの後ろへ移動
+           // カーソル位置を挿入したテキストの後ろへ移動
                 cursorposition += buttonText.Length;
-
-                // 上記の条件かつボタンテキスト追加前のDisplay.Textが空文字かつボタンテキストが"00"の場合
-                if (tmpDisplayText == "" && buttonText == "00")
-                {
-                    // カーソル位置を一つ前に戻す
-                    cursorposition--;
-                }
-            }
         }
 
         // イコール以降を文字列inputへ追加
@@ -480,19 +513,15 @@ namespace DesktTopCalculator
         // 文字列を適切な形に変換してDisplayへ表示
         public void UpdateDisplay(string txt)
         {
+            // 現在のカーソル位置より後ろの文字列数を取得
+            int aftercursolstr = Display.Text.Substring(cursorposition).Length;
+
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
             string input = txt.Replace(",", "");
 
             // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
-            List<string> expression = Regex.Split(input, @"([^0-9\.]+)").ToList();
+            List<string> expression = Regex.Split(input, @"([^\d\.]+)").ToList();
 
-            // expressionが空でない場合は、最後の要素を取得し、空の場合は空文字列を代入する
-            string endExpression = expression.Count > 0 ? expression[expression.Count - 1] : "";
-
-            // endExpressionがnullでなく、かつ最後の文字がピリオドでない場合に処理を実行する
-            // または、endExpressionが空の場合も処理を実行する
-            if (!string.IsNullOrEmpty(endExpression) && endExpression[endExpression.Length - 1] != '.' || string.IsNullOrEmpty(endExpression))
-            {
                 for (int i = 0; i < expression.Count; i++)
                 {
                     // 空文字の場合ブレーク
@@ -504,8 +533,20 @@ namespace DesktTopCalculator
                     // 数字の時
                     if (IsNumeric(expression[i]))
                     {
-                        decimal number = Convert.ToDecimal(expression[i]);
-                        expression[i] = number.ToString("#,##0.############");
+                        // 文字列にピリオドが含まれていたら
+                        if (expression[i].Contains('.'))
+                        {
+                            // 文字列の中で一番めのピリオドの位置を確認
+                            int index = expression[i].IndexOf('.');
+                            // ピリオドの前の文字列を取得
+                            string beforepiriod = expression[i].Substring(0, index);
+                            // ピリオドの前の文字列を三桁区切りへ変換したものとピリオド以降を足して文字列を作成
+                            expression[i] = Regex.Replace(beforepiriod, @"(\d{1,3})(?=(\d{3})+(?!\d))", "$1,")+ expression[i].Substring(index);
+                        }
+                        else
+                        {
+                            expression[i] = Regex.Replace(expression[i], @"(\d{1,3})(?=(\d{3})+(?!\d))", "$1,");
+                        }
                     }
                     // パーセントかつ直前が数字だった時
                     else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
@@ -514,32 +555,17 @@ namespace DesktTopCalculator
                         decimal answer = number * 0.01m;
                         expression[i - 1] = answer.ToString("#,##0.############");
                         expression.RemoveAt(i);
-                        i--;
+                        // 計算後の文字列の長さから計算前の文字列の長さを引いた数分カーソル位置を移動
+                        cursorposition += (expression[i - 1].Length -cursorposition);
                     }
                 }
 
-
-                // Dssplay.Text更新前のコンマの数をカウント
-                int beforeCommaCount = Display.Text.Count(c => c == ',');
-
-                // Listの要素を文字列へ再度代入
-                Display.Text = string.Concat(expression);
-
-                // Dssplay.Text更新後のコンマの数をカウント
-                int afterCommaCount = Display.Text.Count(c => c == ',');
-
-                // コンマの数が1つ増えた場合
-                if (afterCommaCount - beforeCommaCount == 1)
-                {
-                    // カーソル位置を一つ後ろに移動
-                    cursorposition++;
-                }
-                // コンマの数が1つ減った場合
-                else if (afterCommaCount - beforeCommaCount == -1)
-                {
-                    // カーソル位置を一つ前に移動
-                    cursorposition--;
-                }
+            // Listの要素を文字列へ再度代入
+            Display.Text = string.Concat(expression);
+            // 変換前のカーソルの後の文字列が変換後の文字列と変わっていた場合
+            if(aftercursolstr != Display.Text.Substring(cursorposition).Length)
+            {
+                cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
             }
         }
 
