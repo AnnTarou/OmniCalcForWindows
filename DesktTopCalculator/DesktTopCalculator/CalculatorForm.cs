@@ -45,6 +45,10 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
+            }
             AddDisplay("0");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -57,6 +61,10 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
+            }
             AddDisplay("1");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -67,6 +75,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 ClearMethod();
+            }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
             }
             AddDisplay("2");
             UpdateDisplay(Display.Text);
@@ -79,6 +91,10 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
+            }
             AddDisplay("3");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -89,6 +105,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 ClearMethod();
+            }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
             }
             AddDisplay("4");
             UpdateDisplay(Display.Text);
@@ -101,6 +121,10 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
+            }
             AddDisplay("5");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -111,6 +135,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 ClearMethod();
+            }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
             }
             AddDisplay("6");
             UpdateDisplay(Display.Text);
@@ -123,6 +151,10 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
+            }
             AddDisplay("7");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -134,6 +166,10 @@ namespace DesktTopCalculator
             {
                 ClearMethod();
             }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
+            }
             AddDisplay("8");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -144,6 +180,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 ClearMethod();
+            }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            {
+                return;
             }
             AddDisplay("9");
             UpdateDisplay(Display.Text);
@@ -157,7 +197,7 @@ namespace DesktTopCalculator
                 ClearMethod();
                 return;
             }
-            else if(Display.Text.Length == 0)
+            else if ((Display.Text.Length == 0)|| (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\)\%]")))
             {
                 return;
             }
@@ -174,12 +214,19 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 ClearMethod();
+                AddDisplay(".");
+                UpdateDisplay(Display.Text);
+                ts.TempStack(Display.Text, cursorposition);
             }
-            else if (Display.Text.Length == 0)
+            else if ((Display.Text.Length == 0) || (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(]")))
             {
                 AddDisplay("0.");
                 UpdateDisplay(Display.Text);
                 ts.TempStack(Display.Text, cursorposition);
+            }
+            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
+            {
+                return;
             }
             else
             {
@@ -195,7 +242,11 @@ namespace DesktTopCalculator
             {
                 SelectResult();
             }
-            else if(Display.Text.Length == 0)
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else if (Regex.IsMatch(Display.Text[cursorposition-1].ToString() , @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -210,7 +261,7 @@ namespace DesktTopCalculator
             {
                 SelectResult();
             }
-            else if (Display.Text.Length == 0)
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -224,8 +275,12 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
-                            }
+            }
             else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -245,7 +300,10 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            else
+            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
+            {
+                return;
+            }
             AddDisplay("÷");
             UpdateDisplay(Display.Text);
             ts.TempStack(Display.Text, cursorposition);
@@ -256,6 +314,10 @@ namespace DesktTopCalculator
             if (endflag)
             {
                 SelectResult();
+            }
+            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\.\%]"))
+            {
+                return;
             }
             AddDisplay("(");
             UpdateDisplay(Display.Text);
@@ -270,6 +332,10 @@ namespace DesktTopCalculator
                 return;
             }
             else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
             {
                 return;
             }
@@ -291,6 +357,10 @@ namespace DesktTopCalculator
             else if(Display.Text.Length == 0) 
             {
                 return;            
+            }
+            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
+            {
+                return;
             }
             AddDisplay("%");
             UpdateDisplay(Display.Text);
@@ -494,9 +564,6 @@ namespace DesktTopCalculator
         // ボタンのテキストをDisplayへ追加
         public void AddDisplay(string buttonText)
         {
-            // Display.Textが更新される前の値を一時保存
-            string tmpDisplayText = Display.Text;
-
             // カーソル位置の直後にボタンテキストを追加
             Display.Text = Display.Text.Insert(cursorposition, buttonText);
 
@@ -519,17 +586,11 @@ namespace DesktTopCalculator
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
             string input = txt.Replace(",", "");
 
-            // 正規表現　\D+　数字以外の文字が1回以上続く部分で切り分けて格納。
+            // 正規表現 数字が1回以上続く部分で切り分けて格納。
             List<string> expression = Regex.Split(input, @"([^\d\.]+)").ToList();
 
                 for (int i = 0; i < expression.Count; i++)
                 {
-                    // 空文字の場合ブレーク
-                    if (string.IsNullOrEmpty(expression[i]))
-                    {
-                        break;
-                    }
-
                     // 数字の時
                     if (IsNumeric(expression[i]))
                     {

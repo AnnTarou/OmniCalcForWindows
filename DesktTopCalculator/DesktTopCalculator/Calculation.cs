@@ -40,38 +40,10 @@ namespace DesktTopCalculator
         }
         public bool CheckFormula(string formula)
         {
-            // 演算子等が重ねて入力されている場合
-            if(Regex.IsMatch(formula, @"[+\-\*\/\%\.]{2,20}"))
-            {
-                MessageBox.Show("formula is incorrect", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;               
-            }
-            // 演算子から文字列が始まる場合
-            if (Regex.IsMatch(formula, @"^[\*\/\.\%\)]"))
-            {
-                MessageBox.Show("formula is incorrect", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
             // 数字の中にピリオドが複数ある場合
             if (Regex.IsMatch(formula, @"\d*\.\d+\."))
             {
                 MessageBox.Show("Check the number of periods", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-            // 前括弧の直後に演算子やピリオド、後括弧がある場合
-            if (Regex.IsMatch(formula, @"\((?=[+\-\*\/\.\)])"))
-            {
-                MessageBox.Show("formula is incorrect", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-            // 後括弧の直後に数字またはピリオドがある場合
-            if (Regex.IsMatch(formula, @"\)(?=[\d\%\.])"))
-            {
-                MessageBox.Show("formula is incorrect", "Error",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
