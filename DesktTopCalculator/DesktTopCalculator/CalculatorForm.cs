@@ -1,4 +1,6 @@
+using System.Numerics;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace DesktTopCalculator
 {
@@ -559,7 +561,7 @@ namespace DesktTopCalculator
             }
         }
 
-        //[Display]を押したとき
+        // [Display]を押したとき
         private void Display_Click(object sender, EventArgs e)
         {
             // カーソル位置を取得
@@ -597,12 +599,12 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            // カーソル位置が0で文字列がある場合
+            // カーソル位置が0のとき
             else if (cursorposition == 0)
             {
                 return;
             }
-            // 文字列がない場合
+            // 文字列がないとき
             else if (Display.Text.Length == 0)
             {
                 return;
@@ -613,8 +615,47 @@ namespace DesktTopCalculator
                 // カーソルの左側一文字削除
                 Display.Text = Display.Text.Remove(cursorposition - 1, 1);
 
-                // カーソルの位置を再度取得
+                // カーソルの位置を1つずらす
                 cursorposition -= 1;
+
+                // カーソル位置が4以上かつ、カーソルの直前が(+,-,×,÷,括弧,.,%)でないまたはカーソルより後ろに文字がない場合
+                if (cursorposition >= 4 && 
+                    (!(Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\)\.\%]")) &&
+                    (Display.Text.Substring(cursorposition).Length == 0)))
+
+                {
+                    // カーソル直前の文字のインデックス
+                    int start = cursorposition - 1;
+
+                    // テキストが数字またはカンマのとき
+                    while (char.IsDigit(Display.Text[start]) || Display.Text[start] == ',')
+                    {
+                        // 開始位置が0になったらbreak
+                        if (start == 0)
+                        {
+                            break;
+                        }
+
+                        //文字のインデクスをさかのぼる
+                        start--;
+                    }
+
+                    // startが0でない
+                    if (start != 0)
+                    {
+                        start++;
+                    }
+
+                    // 開始位置からカーソル位置までの部分文字列を取得
+                    string numberChunk = Display.Text.Substring(start, cursorposition - start);
+
+                    // Displayの文字数が4の倍数のとき
+                    if (numberChunk.Length % 4 == 0)
+                    {
+                        // カーソルの位置をさらに1つずらす
+                        cursorposition -= 1;
+                    }
+                }
 
                 // Displayへ表示
                 UpdateDisplay(Display.Text);
@@ -781,7 +822,7 @@ namespace DesktTopCalculator
             for (int i = 0; i < expression.Count; i++)
             {
                 // 数字の時
-                if (IsNumeric(expression[i]))
+                if (Regex.IsMatch(expression[i], @"\d"))
                 {
                     // 文字列にピリオドが含まれていたら
                     if (expression[i].Contains('.'))
@@ -801,13 +842,13 @@ namespace DesktTopCalculator
                     }
                 }
                 // パーセントかつ直前が数字だった時
-                else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
+                else if (expression[i] == "%" && Regex.IsMatch(expression[i - 1], @"\d"))
                 {
                     // %の前の数字をdecimal型に変換
-                    decimal number = Convert.ToDecimal(expression[i - 1]);
+                    decimal number = decimal.Parse(expression[i - 1]);
 
                     // 変換した数字に0.01をかける
-                    decimal answer = number * 0.01m;
+                   decimal answer = number * 0.01m;
 
                     // 計算結果を文字列に変換して代入
                     expression[i - 1] = answer.ToString("#,##0.############");
@@ -822,22 +863,22 @@ namespace DesktTopCalculator
 
             // Listの要素を文字列へ再度代入
             Display.Text = string.Concat(expression);
-
-            // 変換前のカーソルの後ろの文字列が変換後のものと変わっていたとき
-            if (aftercursolstr != Display.Text.Substring(cursorposition).Length)
+   
+            // 変換後にカーソルの位置の後ろの文字数が増えていたとき
+            if (aftercursolstr < Display.Text.Substring(cursorposition).Length)
             {
-                // 変更の文字列分カーソル位置を移動
+                // 増えた文字数分カーソル位置を移動
+                cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
+            }
+            // 変換後にカーソルの位置の後ろの文字数が減っていたとき
+            else if (aftercursolstr > Display.Text.Substring(cursorposition).Length)
+            {
+                // 減った文字数分カーソル位置を移動
                 cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
             }
         }
 
-        // 文字列が数値かを問う
-        public static bool IsNumeric(string inp)
-        {
-            return decimal.TryParse(inp, out _);
-        }
-
-        // 計算結果から＝以降の文字列を取得しDisplayへ追加する
+       // 計算結果から＝以降の文字列を取得しDisplayへ追加する
         public void SelectResult()
         {
             // ＝のインデックスを取得

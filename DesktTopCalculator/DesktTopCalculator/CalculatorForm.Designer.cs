@@ -347,7 +347,7 @@
             Display.Font = new Font("メイリオ", 17F, FontStyle.Regular, GraphicsUnit.Point, 128);
             Display.HideSelection = false;
             Display.Location = new Point(10, 170);
-            Display.MaxLength = 3000;
+            Display.MaxLength = 0;
             Display.Multiline = true;
             Display.Name = "Display";
             Display.ReadOnly = true;
