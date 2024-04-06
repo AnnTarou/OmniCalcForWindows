@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-
-namespace DesktTopCalculator
+﻿namespace DesktTopCalculator
 {
+    // 保存系クラス
     internal class TempStorage
     {
         // Display.Textを保存するスタック
         public Stack<string> storageStack = new Stack<string>();
+
         // カーソル位置を保存するスタック        
         public Stack<int> storageStackIndex = new Stack<int>();
 
         // スタックの初期化
         public void PushInitialValue()
         {
+            // スタックに空文字とカーソル位置0をPush
             storageStack.Push("");
             storageStackIndex.Push(0);
         }
 
         // Display.Textとカーソル位置をスタックへ保存する
-        public void TempStack(string text , int cursorposition)
+        public void TempStack(string text, int cursorposition)
         {
             // Display.Textが何もなければ空文字列をスタックへ保存
-            if(text == null)
+            if (text == null)
             {
                 storageStack.Push("");
             }
@@ -34,6 +29,8 @@ namespace DesktTopCalculator
             {
                 storageStack.Push(text);
             }
+
+            // カーソル位置を保存
             storageStackIndex.Push(cursorposition);
         }
 
@@ -41,6 +38,7 @@ namespace DesktTopCalculator
         public void ClearStack()
         {
             storageStack.Clear();
+
             storageStackIndex.Clear();
         }
 
@@ -49,6 +47,7 @@ namespace DesktTopCalculator
         {
             // 一番上のテキストを取り出す
             storageStack.Pop();
+
             // 二番目のテキストを返す
             return storageStack.Pop();
         }
@@ -58,6 +57,7 @@ namespace DesktTopCalculator
         {
             // 一番上のカーソル位置を取り出す
             storageStackIndex.Pop();
+
             // 二番目のカーソル位置を返す
             return storageStackIndex.Pop();
         }
@@ -65,6 +65,7 @@ namespace DesktTopCalculator
         // KeepBoxの文字列の取得
         public string SelectResult(ListBox buttonkeep)
         {
+
             string selectedItem = buttonkeep.SelectedItem.ToString();
 
             // ＝のインデックスを検索

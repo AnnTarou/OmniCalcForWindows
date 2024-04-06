@@ -1,22 +1,10 @@
-using Antlr4.Runtime;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using System.Globalization;
-using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Net.Mime.MediaTypeNames;
-using System.Data.SqlTypes;
 
 namespace DesktTopCalculator
 {
     public partial class CalculatorForm : Form
     {
-        // 計算式を表示するテキストボックスの名前はDisplay
-        // Keepした計算式を入れるリストボックスの名前はKeepBox
-
-        // 計算が終了したか？計算結果がでた時のみtrueになる
+        // 計算結果がでた時のみtrueになる
         public bool endflag = false;
 
         // カーソルの位置を追跡するための変数
@@ -28,6 +16,7 @@ namespace DesktTopCalculator
         // 保存系メソッドクラスのオブジェクト
         TempStorage ts;
 
+        // フォームのコンストラクター
         public CalculatorForm()
         {
             InitializeComponent();
@@ -41,335 +30,498 @@ namespace DesktTopCalculator
         // [0]を押したとき
         private void button0_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("0");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
 
         }
+
         // [1]を押したとき
         private void button1_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("1");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [2]を押したとき
         private void button2_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("2");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [3]を押したとき
         private void button3_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("3");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [4]を押したとき
         private void button4_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("4");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [5]を押したとき
         private void button5_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("5");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [6]を押したとき
         private void button6_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("6");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [7]を押したとき
         private void button7_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("7");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [8]を押したとき
         private void button8_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("8");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [9]を押したとき
         private void button9_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
             }
+            // カーソル位置の前の文字が後括弧もしくは%のとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("9");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [00]を押したとき
         private void button00_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
                 return;
             }
-            else if ((Display.Text.Length == 0)|| (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\)\%]")))
+            // 入力はじめまたはカーソル位置の前の文字が(+,-,×,÷,括弧,%)いずれかのとき
+            else if ((Display.Text.Length == 0) || (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\)\%]")))
             {
                 return;
             }
             else
             {
+                // 各処理をしてDisplayにテキストとして表示
                 AddDisplay("00");
                 UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
             }
         }
+
         // [.]を押したとき
         private void buttonPeriod_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 初期化
                 ClearMethod();
+
+                // 各処理をしてDisplayにテキストとして表示
                 AddDisplay(".");
                 UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
+
             }
+            // 入力はじめまたはカーソル位置の前の文字が(+,-,×,÷,前括弧)いずれかのとき
             else if ((Display.Text.Length == 0) || (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(]")))
             {
+                // 各処理をしてDisplayにテキストとして表示
                 AddDisplay("0.");
                 UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
             }
+            // カーソル位置の前の文字が(.,%,後括弧)いずれかのとき
             else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
             {
                 return;
             }
             else
             {
+                // 各処理をしてDisplayにテキストとして表示
                 AddDisplay(".");
                 UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
+
             }
         }
+
         // [+]を押したとき
         private void buttonpuls_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
+            // 入力はじめのとき
             else if (Display.Text.Length == 0)
             {
                 return;
             }
-            else if (Regex.IsMatch(Display.Text[cursorposition-1].ToString() , @"[\+\-\u00D7\u00F7\(\.\%]"))
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
+            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("+");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [-]を押したとき
         private void buttonminus_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("-");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [×]を押したとき
         private void buttonmultiply_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
+            // 入力はじめのとき
             else if (Display.Text.Length == 0)
             {
                 return;
             }
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
             else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("×");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
-        
         }
+
         // [÷]を押したとき
         private void buttondivision_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
+            // 入力はじめのとき
             else if (Display.Text.Length == 0)
             {
                 return;
             }
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
             else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("÷");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
+
         }
+
         // [前括弧]を押したとき
         private void buttonfrontbracket_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
-                SelectResult();
+                // 初期化
+                ClearMethod();
             }
+            // カーソル位置の前の文字が(後括弧,.,%)いずれかのとき
             else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\.\%]"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("(");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [後括弧]を押したとき
         private void buttonbackbracket_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
                 return;
             }
+            // 入力はじめのとき
             else if (Display.Text.Length == 0)
             {
                 return;
             }
+            // カーソル位置の前の文字が数字以外のとき
             else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
             {
                 return;
             }
             else
             {
+                // 各処理をしてDisplayにテキストとして表示
                 AddDisplay(")");
                 UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
             }
         }
+
         // [％]を押したとき
         private void buttonpercent_Click(object sender, EventArgs e)
         {
-
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
+                // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
-            else if(Display.Text.Length == 0) 
+            // 入力はじめのとき
+            else if (Display.Text.Length == 0)
             {
-                return;            
+                return;
             }
+            // カーソル位置の前の文字が数字以外のとき
             else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
             {
                 return;
             }
+
+            // 各処理をしてDisplayにテキストとして表示
             AddDisplay("%");
             UpdateDisplay(Display.Text);
+
+            // StackへDisplayのテキストとカーソル位置をPush
             ts.TempStack(Display.Text, cursorposition);
         }
+
         // [＝]を押したとき
         private void buttonequal_Click(object sender, EventArgs e)
         {
-            // 計算結果が出た後にイコールが押された場合
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
                 return;
@@ -382,17 +534,21 @@ namespace DesktTopCalculator
                     // 計算メソッド
                     cl.Calculate();
 
+                    // 計算不能、計算結果∞、結果空文字のとき
                     if (cl.resultnumber == "NaN" || cl.resultnumber == "∞" || string.IsNullOrEmpty(cl.resultnumber))
                     {
+                        // エラーのメッセージボックス表示
                         MessageBox.Show("Can't calculate", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
                     else
                     {
+                        // イコール以下を処理してDisplayへ表示
                         AddEqual("=", cl.resultnumber);
                         UpdateDisplay(Display.Text);
-                        // Keep,AC,Cしかボタンを押せないようにする
+
+                        // 計算結果がでたフラグを立ててKeep,AC,Cボタンしか押せないようにする
                         endflag = true;
                     }
                 }
@@ -402,13 +558,15 @@ namespace DesktTopCalculator
                 }
             }
         }
-        // Displayがクリックされた時
+
+        //[Display]を押したとき
         private void Display_Click(object sender, EventArgs e)
         {
             // カーソル位置を取得
             cursorposition = Display.SelectionStart;
         }
-        // Displayにキーダウンがあった時
+
+        // [Display]にキーダウンがあった時
         private void Display_KeyDown(object sender, KeyEventArgs e)
         {
             // 右矢印キーが押されたとき
@@ -430,16 +588,17 @@ namespace DesktTopCalculator
                 }
             }
         }
+
         // [delete]を押したとき
         private void buttonchardelete_Click(object sender, EventArgs e)
         {
-            // 計算結果が出た後は何もしない
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
                 return;
             }
             // カーソル位置が0で文字列がある場合
-            else if (cursorposition == 0 && Display.Text.Length > 0)
+            else if (cursorposition == 0)
             {
                 return;
             }
@@ -453,53 +612,65 @@ namespace DesktTopCalculator
             {
                 // カーソルの左側一文字削除
                 Display.Text = Display.Text.Remove(cursorposition - 1, 1);
+
                 // カーソルの位置を再度取得
                 cursorposition -= 1;
+
                 // Displayへ表示
                 UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
             }
         }
+
         // [return]を押したとき
         private void buttonreturn_Click(object sender, EventArgs e)
         {
-            // 計算結果が出た後は何もしない
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
                 return;
             }
-            // スタックが実質空の時
-            else if (ts.storageStack.Count==1 || ts.storageStackIndex.Count == 1)
+            // スタックが実質空のとき
+            else if (ts.storageStack.Count == 1 || ts.storageStackIndex.Count == 1)
             {
                 return;
             }
-            // スタックに要素がある場合はそれぞれの値を取り出して代入
+            // スタックに要素があるとき
             else
             {
+                // スタックの2番目のDisplayテキストとカーソル位置を代入
                 Display.Text = ts.PopDisplayText();
                 cursorposition = ts.PopCursoulPosition();
+
                 // 元に戻した後のDisplay.Textとカーソル位置をスタックへ積む
                 ts.TempStack(Display.Text, cursorposition);
             }
-            
+
         }
+
         // [C]を押したとき
         private void buttonTextClear_Click(object sender, EventArgs e)
         {
-            // Displayとフィールドの初期化
+            // Displayとメンバー変数の初期化
             ClearMethod();
         }
+
         // [AC]を押したとき
         private void buttonAllClear_Click(object sender, EventArgs e)
         {
-            // Displayとフィールドの初期化
+            // Displayとメンバー変数の初期化
             ClearMethod();
+
             // KeepBoxの初期化
             KeepBox.Items.Clear();
         }
-        // Keepボタンをクリックしたとき
+
+        // [Keep]を押したとき
         private void buttonKeep_Click(object sender, EventArgs e)
         {
+            // 計算結果が出た後に押されたとき
             if (endflag)
             {
                 KeepBox.Items.Add(Display.Text);
@@ -509,14 +680,17 @@ namespace DesktTopCalculator
                 return;
             }
         }
-        // Keepボタンをダブルクリックした時⇒Displayへ追加
+
+        // [KeepBox]をダブルクリックしたとき
         private void KeepBox_DoubleClick(object sender, EventArgs e)
         {
+            // KeepBoxが空のとき
             if (KeepBox.SelectedItem == null)
             {
                 return;
             }
-            else if (Display.Text.Contains("="))
+            // 計算結果が出た後に押されたとき
+            else if (endflag)
             {
                 // Displayとフィールドの初期化
                 ClearMethod();
@@ -525,33 +699,46 @@ namespace DesktTopCalculator
                 AddDisplay(ts.SelectResult(KeepBox));
                 UpdateDisplay(Display.Text);
             }
+            // 計算式入力途中の時
             else
             {
+                 // カーソル位置の前の文字が後括弧もしくは%のとき
+                if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+                {
+                    return;
+                }
                 // DisplayにKeepの回答部分のみ追加
-                AddDisplay(ts.SelectResult(KeepBox));
-                UpdateDisplay(Display.Text);
+                else 
+                {
+                    // KeepBoxの回答部分をDisplayへ追加
+                    AddDisplay(ts.SelectResult(KeepBox));
+                    UpdateDisplay(Display.Text);
+                }
             }
         }
+
         // KeepBoxの削除ボタンが押されたとき
         private void このリストの削除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // KeepBoxがnullでないとき
             if (KeepBox.SelectedItem != null)
             {
+                // KeepBoxのアイテムを削除
                 KeepBox.Items.Remove(KeepBox.SelectedItem);
             }
             else
             {
                 return;
             }
-
         }
+
         // 初期値に戻すメソッド
         public void ClearMethod()
         {
             // Displayのクリア
             Display.Clear();
 
-            // フィールド初期化            
+            // メンバー変数の初期化            
             endflag = false;
             cursorposition = 0;
             cl.formula = "";
@@ -561,14 +748,15 @@ namespace DesktTopCalculator
             // スタックの初期化
             ts.PushInitialValue();
         }
+
         // ボタンのテキストをDisplayへ追加
         public void AddDisplay(string buttonText)
         {
             // カーソル位置の直後にボタンテキストを追加
             Display.Text = Display.Text.Insert(cursorposition, buttonText);
 
-           // カーソル位置を挿入したテキストの後ろへ移動
-                cursorposition += buttonText.Length;
+            // カーソル位置を挿入したテキストの後ろへ移動
+            cursorposition += buttonText.Length;
         }
 
         // イコール以降を文字列inputへ追加
@@ -577,6 +765,7 @@ namespace DesktTopCalculator
             Display.Text += (eql + res);
 
         }
+
         // 文字列を適切な形に変換してDisplayへ表示
         public void UpdateDisplay(string txt)
         {
@@ -586,46 +775,58 @@ namespace DesktTopCalculator
             // Displayのテキストを数値評価用に加工するために","を取り除いた形で文字列へ代入
             string input = txt.Replace(",", "");
 
-            // 正規表現 数字が1回以上続く部分で切り分けて格納。
+            // 数字が1回以上続く部分で切り分けてリストに格納。
             List<string> expression = Regex.Split(input, @"([^\d\.]+)").ToList();
 
-                for (int i = 0; i < expression.Count; i++)
+            for (int i = 0; i < expression.Count; i++)
+            {
+                // 数字の時
+                if (IsNumeric(expression[i]))
                 {
-                    // 数字の時
-                    if (IsNumeric(expression[i]))
+                    // 文字列にピリオドが含まれていたら
+                    if (expression[i].Contains('.'))
                     {
-                        // 文字列にピリオドが含まれていたら
-                        if (expression[i].Contains('.'))
-                        {
-                            // 文字列の中で一番めのピリオドの位置を確認
-                            int index = expression[i].IndexOf('.');
-                            // ピリオドの前の文字列を取得
-                            string beforepiriod = expression[i].Substring(0, index);
-                            // ピリオドの前の文字列を三桁区切りへ変換したものとピリオド以降を足して文字列を作成
-                            expression[i] = Regex.Replace(beforepiriod, @"(\d{1,3})(?=(\d{3})+(?!\d))", "$1,")+ expression[i].Substring(index);
-                        }
-                        else
-                        {
-                            expression[i] = Regex.Replace(expression[i], @"(\d{1,3})(?=(\d{3})+(?!\d))", "$1,");
-                        }
+                        // 文字列の中で一番目のピリオドの位置を確認
+                        int index = expression[i].IndexOf('.');
+
+                        // ピリオドの前の文字列を取得
+                        string beforepiriod = expression[i].Substring(0, index);
+
+                        // ピリオドの前の文字列を三桁区切りへ変換したものとピリオド以降を足して文字列を作成
+                        expression[i] = Regex.Replace(beforepiriod, @"(\d{1,3})(?=(\d{3})+(?!\d))", "$1,") + expression[i].Substring(index);
                     }
-                    // パーセントかつ直前が数字だった時
-                    else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
+                    else
                     {
-                        decimal number = Convert.ToDecimal(expression[i - 1]);
-                        decimal answer = number * 0.01m;
-                        expression[i - 1] = answer.ToString("#,##0.############");
-                        expression.RemoveAt(i);
-                        // 計算後の文字列の長さから計算前の文字列の長さを引いた数分カーソル位置を移動
-                        cursorposition += (expression[i - 1].Length -cursorposition);
+                        expression[i] = Regex.Replace(expression[i], @"(\d{1,3})(?=(\d{3})+(?!\d))", "$1,");
                     }
                 }
+                // パーセントかつ直前が数字だった時
+                else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
+                {
+                    // %の前の数字をdecimal型に変換
+                    decimal number = Convert.ToDecimal(expression[i - 1]);
+
+                    // 変換した数字に0.01をかける
+                    decimal answer = number * 0.01m;
+
+                    // 計算結果を文字列に変換して代入
+                    expression[i - 1] = answer.ToString("#,##0.############");
+
+                    // %のインデックスを削除
+                    expression.RemoveAt(i);
+
+                    // 計算後の文字列の長さから計算前の文字列の長さを引いた数分カーソル位置を移動
+                    cursorposition += (expression[i - 1].Length - cursorposition);
+                }
+            }
 
             // Listの要素を文字列へ再度代入
             Display.Text = string.Concat(expression);
-            // 変換前のカーソルの後の文字列が変換後の文字列と変わっていた場合
-            if(aftercursolstr != Display.Text.Substring(cursorposition).Length)
+
+            // 変換前のカーソルの後ろの文字列が変換後のものと変わっていたとき
+            if (aftercursolstr != Display.Text.Substring(cursorposition).Length)
             {
+                // 変更の文字列分カーソル位置を移動
                 cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
             }
         }
@@ -647,8 +848,10 @@ namespace DesktTopCalculator
             {
                 // ＝の位置以降の部分文字列を取得
                 string selectresult = Display.Text.Substring(index + 1);
-                // リセット
+
+                // 初期化
                 ClearMethod();
+
                 // 数値としてDisplayへ追加
                 AddDisplay(selectresult);
             }
