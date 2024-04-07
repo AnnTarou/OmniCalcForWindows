@@ -559,7 +559,7 @@ namespace DesktTopCalculator
             }
         }
 
-        //[Display]を押したとき
+        // [Display]を押したとき
         private void Display_Click(object sender, EventArgs e)
         {
             // カーソル位置を取得
@@ -597,12 +597,12 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            // カーソル位置が0で文字列がある場合
+            // カーソル位置が0のとき
             else if (cursorposition == 0)
             {
                 return;
             }
-            // 文字列がない場合
+            // 文字列がないとき
             else if (Display.Text.Length == 0)
             {
                 return;
@@ -613,7 +613,7 @@ namespace DesktTopCalculator
                 // カーソルの左側一文字削除
                 Display.Text = Display.Text.Remove(cursorposition - 1, 1);
 
-                // カーソルの位置を再度取得
+                // カーソルの位置を1つずらす
                 cursorposition -= 1;
 
                 // Displayへ表示
@@ -647,7 +647,6 @@ namespace DesktTopCalculator
                 // 元に戻した後のDisplay.Textとカーソル位置をスタックへ積む
                 ts.TempStack(Display.Text, cursorposition);
             }
-
         }
 
         // [C]を押したとき
@@ -702,13 +701,13 @@ namespace DesktTopCalculator
             // 計算式入力途中の時
             else
             {
-                 // カーソル位置の前の文字が後括弧もしくは%のとき
+                // カーソル位置の前の文字が後括弧もしくは%のとき
                 if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
                 {
                     return;
                 }
                 // DisplayにKeepの回答部分のみ追加
-                else 
+                else
                 {
                     // KeepBoxの回答部分をDisplayへ追加
                     AddDisplay(ts.SelectResult(KeepBox));
@@ -781,7 +780,7 @@ namespace DesktTopCalculator
             for (int i = 0; i < expression.Count; i++)
             {
                 // 数字の時
-                if (IsNumeric(expression[i]))
+                if (Regex.IsMatch(expression[i], @"\d"))
                 {
                     // 文字列にピリオドが含まれていたら
                     if (expression[i].Contains('.'))
@@ -801,40 +800,95 @@ namespace DesktTopCalculator
                     }
                 }
                 // パーセントかつ直前が数字だった時
-                else if (expression[i] == "%" && IsNumeric(expression[i - 1]))
+                else if (expression[i] == "%" && Regex.IsMatch(expression[i - 1], @"\d"))
                 {
-                    // %の前の数字をdecimal型に変換
-                    decimal number = Convert.ToDecimal(expression[i - 1]);
+                    try
+                    {
+                        // %の前の数字をdecimal型に変換
+                        decimal number = decimal.Parse(expression[i - 1]);
 
-                    // 変換した数字に0.01をかける
-                    decimal answer = number * 0.01m;
+                        // 変換した数字に0.01をかける
+                        decimal answer = number * 0.01m;
 
-                    // 計算結果を文字列に変換して代入
-                    expression[i - 1] = answer.ToString("#,##0.############");
+                        // 計算結果を文字列に変換して代入
+                        expression[i - 1] = answer.ToString("#,##0.################");
 
-                    // %のインデックスを削除
-                    expression.RemoveAt(i);
+                        // %のインデックスを削除
+                        expression.RemoveAt(i);
 
-                    // 計算後の文字列の長さから計算前の文字列の長さを引いた数分カーソル位置を移動
-                    cursorposition += (expression[i - 1].Length - cursorposition);
+                        // 計算後の文字列の長さから計算前の文字列の長さを引いた数分カーソル位置を移動
+                        cursorposition += (expression[i - 1].Length - cursorposition);
+                    }
+                    // 数字の中に少数点が複数含まれるとき
+                    catch (FormatException)
+                    {
+                        // エラーのメッセージボックス表示
+                        MessageBox.Show("Number is invalid", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // %のインデックスを削除
+                        expression.RemoveAt(i);
+
+                        // カーソル位置を元に戻す
+                        cursorposition -= 1;
+
+                        break;
+                    }
+                    // Decimal型の桁数を超えているとき
+                    catch (OverflowException)
+                    {
+                        // エラーのメッセージボックス表示
+                        MessageBox.Show("Number of digits is out of range", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // %のインデックスを削除
+                        expression.RemoveAt(i);
+
+                        // カーソル位置を元に戻す
+                        cursorposition -= 1;
+
+                        break;
+                    }
+                    // その他のエラーが発生したとき
+                    catch (Exception)
+                    {
+                        // エラーのメッセージボックス表示
+                        MessageBox.Show("Cannot be calculated", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // %のインデックスを削除
+                        expression.RemoveAt(i);
+
+                        // カーソル位置を元に戻す
+                        cursorposition -= 1;
+
+                        break;
+                    }
                 }
             }
 
             // Listの要素を文字列へ再度代入
             Display.Text = string.Concat(expression);
 
-            // 変換前のカーソルの後ろの文字列が変換後のものと変わっていたとき
-            if (aftercursolstr != Display.Text.Substring(cursorposition).Length)
+            // Displayのテキストの長さがカーソル位置より短い時
+            if (Display.Text.Length < cursorposition)
             {
-                // 変更の文字列分カーソル位置を移動
+                // カーソル位置を文字列の最後尾へ移動
+                cursorposition -= cursorposition - Display.Text.Length;
+            }
+
+            // 変換後にカーソルの位置の後ろの文字数が増えていたとき
+            if (aftercursolstr < Display.Text.Substring(cursorposition).Length)
+            {
+                // 増えた文字数分カーソル位置を移動
                 cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
             }
-        }
-
-        // 文字列が数値かを問う
-        public static bool IsNumeric(string inp)
-        {
-            return decimal.TryParse(inp, out _);
+            // 変換後にカーソルの位置の後ろの文字数が減っていたとき
+            else if (aftercursolstr > Display.Text.Substring(cursorposition).Length)
+            {
+                // 減った文字数分カーソル位置を移動
+                cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
+            }
         }
 
         // 計算結果から＝以降の文字列を取得しDisplayへ追加する
