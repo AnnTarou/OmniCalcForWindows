@@ -1,6 +1,4 @@
-using System.Numerics;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace DesktTopCalculator
 {
@@ -703,13 +701,13 @@ namespace DesktTopCalculator
             // 計算式入力途中の時
             else
             {
-                 // カーソル位置の前の文字が後括弧もしくは%のとき
+                // カーソル位置の前の文字が後括弧もしくは%のとき
                 if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
                 {
                     return;
                 }
                 // DisplayにKeepの回答部分のみ追加
-                else 
+                else
                 {
                     // KeepBoxの回答部分をDisplayへ追加
                     AddDisplay(ts.SelectResult(KeepBox));
@@ -822,7 +820,7 @@ namespace DesktTopCalculator
                         cursorposition += (expression[i - 1].Length - cursorposition);
                     }
                     // 数字の中に少数点が複数含まれるとき
-                    catch(FormatException)
+                    catch (FormatException)
                     {
                         // エラーのメッセージボックス表示
                         MessageBox.Show("Number is invalid", "Error",
@@ -878,7 +876,7 @@ namespace DesktTopCalculator
                 // カーソル位置を文字列の最後尾へ移動
                 cursorposition -= cursorposition - Display.Text.Length;
             }
-            
+
             // 変換後にカーソルの位置の後ろの文字数が増えていたとき
             if (aftercursolstr < Display.Text.Substring(cursorposition).Length)
             {
@@ -893,7 +891,7 @@ namespace DesktTopCalculator
             }
         }
 
-       // 計算結果から＝以降の文字列を取得しDisplayへ追加する
+        // 計算結果から＝以降の文字列を取得しDisplayへ追加する
         public void SelectResult()
         {
             // ＝のインデックスを取得
