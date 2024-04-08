@@ -353,7 +353,7 @@
             Display.ReadOnly = true;
             Display.ScrollBars = ScrollBars.Vertical;
             Display.Size = new Size(460, 105);
-            Display.TabIndex = 48;
+            Display.TabIndex = 0;
             Display.TabStop = false;
             Display.Click += Display_Click;
             Display.KeyDown += Display_KeyDown;

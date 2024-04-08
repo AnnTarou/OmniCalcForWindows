@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DesktTopCalculator
 {
@@ -526,6 +527,16 @@ namespace DesktTopCalculator
             {
                 return;
             }
+            // Displayの文字が2文字以下のとき
+            else if (Display.Text.Length <= 2)
+            {
+                return;
+            }
+            // 文字列があり、Displayの最後の文字が(+,-,×,÷,前括弧,.,%)のとき
+            else if (!string.IsNullOrEmpty(Display.Text) && Regex.IsMatch(Display.Text[Display.Text.Length - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
+            {
+                return;
+            }
             else
             {
                 // 数式評価でエラーがなければ
@@ -614,7 +625,7 @@ namespace DesktTopCalculator
                 Display.Text = Display.Text.Remove(cursorposition - 1, 1);
 
                 // カーソルの位置を1つずらす
-                cursorposition -= 1;
+                cursorposition--;
 
                 // Displayへ表示
                 UpdateDisplay(Display.Text);
@@ -830,7 +841,7 @@ namespace DesktTopCalculator
                         expression.RemoveAt(i);
 
                         // カーソル位置を元に戻す
-                        cursorposition -= 1;
+                        cursorposition--;
 
                         break;
                     }
@@ -845,7 +856,7 @@ namespace DesktTopCalculator
                         expression.RemoveAt(i);
 
                         // カーソル位置を元に戻す
-                        cursorposition -= 1;
+                        cursorposition--;
 
                         break;
                     }
@@ -860,7 +871,7 @@ namespace DesktTopCalculator
                         expression.RemoveAt(i);
 
                         // カーソル位置を元に戻す
-                        cursorposition -= 1;
+                        cursorposition--;
 
                         break;
                     }
