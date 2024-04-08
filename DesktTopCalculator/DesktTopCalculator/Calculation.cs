@@ -10,7 +10,7 @@ namespace DesktTopCalculator
         public string? formula = "";
 
         // 結果を格納する文字列
-        public string? resultnumber = "";
+        public string resultnumber = "";
 
         // 計算用に文字列を変換
         public string? Evaluate(string txt)
@@ -36,64 +36,70 @@ namespace DesktTopCalculator
         }
 
         // 不正な計算式が入力されていないかチェックする
-        public bool CheckFormula(string formula)
+        public bool CheckFormula(string? formula)
         {
-            // 数字の中にピリオドが複数あるとき
-            if (Regex.IsMatch(formula, @"\d*\.\d+\."))
+            if (formula == null)
             {
-                // エラーメッセージを出し結果を返す
-                MessageBox.Show("Check the number of periods", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-            // 括弧の数が均等でなかったら
-            else if (IsBalanced(formula) == false)
-            {
-                // エラーメッセージを出し結果を返す
-                MessageBox.Show("formula is incorrect", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
             else
             {
-                return true;
-            }
-        }
-
-        // 前括弧と後括弧の数が同じか調べる
-        static bool IsBalanced(string formula)
-        {
-            Stack<char> stack = new Stack<char>();
-
-            foreach (char c in formula)
-            {
-                // 前括弧が現れたらPush
-                if (c == '(')
+                // 数字の中にピリオドが複数あるとき
+                if (Regex.IsMatch(formula, @"\d*\.\d+\."))
                 {
-                    stack.Push(c);
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Check the number of periods", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
                 }
-                // 後括弧が現れたとき前括弧をPop
-                else if (c == ')')
+                // 括弧の数が均等でなかったら
+                else if (IsBalanced(formula) == false)
                 {
-                    // 閉じ括弧が現れたが、対応する開き括弧がスタックにない
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("formula is incorrect", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+                // 前括弧と後括弧の数が同じか調べる
+                static bool IsBalanced(string formula)
+                {
+                    Stack<char> stack = new Stack<char>();
+
+                    foreach (char c in formula)
+                    {
+                        // 前括弧が現れたらPush
+                        if (c == '(')
+                        {
+                            stack.Push(c);
+                        }
+                        // 後括弧が現れたとき前括弧をPop
+                        else if (c == ')')
+                        {
+                            // 閉じ括弧が現れたが、対応する開き括弧がスタックにない
+                            if (stack.Count == 0)
+                            {
+                                return false;
+                            }
+
+                            stack.Pop();
+                        }
+                    }
+
+                    // 最終的にスタックが空であれば、すべての括弧が閉じられている
                     if (stack.Count == 0)
+                    {
+                        return true;
+                    }
+                    else
                     {
                         return false;
                     }
-
-                    stack.Pop();
                 }
-            }
-
-            // 最終的にスタックが空であれば、すべての括弧が閉じられている
-            if (stack.Count == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            }     
         }
 
         // 計算メソッド

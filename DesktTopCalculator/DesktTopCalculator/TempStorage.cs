@@ -65,14 +65,13 @@
         // KeepBoxの文字列の取得
         public string SelectResult(ListBox buttonkeep)
         {
-
-            string selectedItem = buttonkeep.SelectedItem.ToString();
+            string? selectedItem = buttonkeep.SelectedItem?.ToString() ?? null;
 
             // ＝のインデックスを検索
-            int indexOfEquals = selectedItem.IndexOf("=");
+            int indexOfEquals = selectedItem?.IndexOf("=") ?? 0;
 
             // ＝以降の文字列を取得
-            string resultString = selectedItem.Substring(indexOfEquals + 1);
+            string resultString = selectedItem?.Substring(indexOfEquals + 1) ?? "";
 
             return resultString;
         }
