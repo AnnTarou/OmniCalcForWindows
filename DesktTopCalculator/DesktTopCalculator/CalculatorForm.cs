@@ -295,7 +295,7 @@ namespace DesktTopCalculator
                 ClearMethod();
 
                 // 各処理をしてDisplayにテキストとして表示
-                AddDisplay(".");
+                AddDisplay("0.");
                 UpdateDisplay(Display.Text);
 
                 // StackへDisplayのテキストとカーソル位置をPush
