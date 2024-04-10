@@ -559,7 +559,7 @@ namespace DesktTopCalculator
                         AddEqual("=", cl.resultnumber);
                         UpdateDisplay(Display.Text);
 
-                        // 計算結果がでたフラグを立ててKeep,AC,Cボタンしか押せないようにする
+                        // 計算が終了したフラグを立てる
                         endflag = true;
                     }
                 }
@@ -712,8 +712,8 @@ namespace DesktTopCalculator
             // 計算式入力途中の時
             else
             {
-                // カーソル位置の前の文字が後括弧もしくは%のとき
-                if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+                // カーソル位置の前の文字が後括弧もしくは%もしくはピリオドのとき
+                if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%\.]"))
                 {
                     return;
                 }

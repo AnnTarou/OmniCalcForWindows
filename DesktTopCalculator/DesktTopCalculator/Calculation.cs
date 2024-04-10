@@ -38,6 +38,7 @@ namespace DesktTopCalculator
         // 不正な計算式が入力されていないかチェックする
         public bool CheckFormula(string? formula)
         {
+            // 計算式が空のとき
             if (formula == null)
             {
                 return false;
@@ -64,42 +65,42 @@ namespace DesktTopCalculator
                 {
                     return true;
                 }
-                // 前括弧と後括弧の数が同じか調べる
-                static bool IsBalanced(string formula)
+            }
+        }
+
+         // 前括弧と後括弧の数が同じか調べる
+        static bool IsBalanced(string formula)
+        {
+                Stack<char> stack = new Stack<char>();
+
+                foreach (char c in formula)
                 {
-                    Stack<char> stack = new Stack<char>();
-
-                    foreach (char c in formula)
+                    // 前括弧が現れたらPush
+                    if (c == '(')
                     {
-                        // 前括弧が現れたらPush
-                        if (c == '(')
-                        {
-                            stack.Push(c);
-                        }
-                        // 後括弧が現れたとき前括弧をPop
-                        else if (c == ')')
-                        {
-                            // 閉じ括弧が現れたが、対応する開き括弧がスタックにない
-                            if (stack.Count == 0)
-                            {
-                                return false;
-                            }
-
-                            stack.Pop();
-                        }
+                        stack.Push(c);
                     }
+                    // 後括弧が現れたとき前括弧をPop
+                    else if (c == ')')
+                    {
+                        // 閉じ括弧が現れたが、対応する開き括弧がスタックにない
+                        if (stack.Count == 0)
+                        {
+                            return false;
+                        }
 
-                    // 最終的にスタックが空であれば、すべての括弧が閉じられている
-                    if (stack.Count == 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
+                        stack.Pop();
                     }
                 }
-            }     
+                // 最終的にスタックが空であれば、すべての括弧が閉じられている
+                if (stack.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
         }
 
         // 計算メソッド
