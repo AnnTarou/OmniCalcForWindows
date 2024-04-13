@@ -38,7 +38,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -62,7 +62,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -85,10 +85,11 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
+
 
             // 各処理をしてDisplayにテキストとして表示
             AddDisplay("2");
@@ -108,7 +109,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -131,7 +132,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -154,7 +155,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -177,7 +178,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -200,7 +201,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -223,7 +224,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -246,7 +247,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が後括弧もしくは%のとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\%]"))
             {
                 return;
             }
@@ -269,8 +270,13 @@ namespace DesktTopCalculator
                 ClearMethod();
                 return;
             }
-            // 入力はじめまたはカーソル位置の前の文字が(+,-,×,÷,括弧,%)いずれかのとき
-            else if ((Display.Text.Length == 0) || (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\)\%]")))
+            // 入力はじめのとき
+            else if (Display.Text.Length == 0)
+            {
+                return;
+            }
+            // カーソル位置の前の文字が(+,-,×,÷,括弧,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\)\%]"))
             {
                 return;
             }
@@ -302,8 +308,18 @@ namespace DesktTopCalculator
                 ts.TempStack(Display.Text, cursorposition);
 
             }
-            // 入力はじめまたはカーソル位置の前の文字が(+,-,×,÷,前括弧)いずれかのとき
-            else if ((Display.Text.Length == 0) || (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(]")))
+            // 入力はじめのとき
+            else if (Display.Text.Length == 0)
+            {
+                // 各処理をしてDisplayにテキストとして表示
+                AddDisplay("0.");
+                UpdateDisplay(Display.Text);
+
+                // StackへDisplayのテキストとカーソル位置をPush
+                ts.TempStack(Display.Text, cursorposition);
+            }
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(]"))
             {
                 // 各処理をしてDisplayにテキストとして表示
                 AddDisplay("0.");
@@ -313,7 +329,7 @@ namespace DesktTopCalculator
                 ts.TempStack(Display.Text, cursorposition);
             }
             // カーソル位置の前の文字が(.,%,後括弧)いずれかのとき
-            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
+            else if (cursorposition > 0　&& Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
             {
                 return;
             }
@@ -325,7 +341,7 @@ namespace DesktTopCalculator
 
                 // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
-
+                
             }
         }
 
@@ -343,8 +359,8 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
-            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
+            // カーソル位置の前の文字が(+,-,×,÷.,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\.\%]"))
             {
                 return;
             }
@@ -366,8 +382,8 @@ namespace DesktTopCalculator
                 // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
-            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
+            // カーソル位置の前の文字が(+,-,×,÷,.,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\.\%]"))
             {
                 return;
             }
@@ -395,7 +411,7 @@ namespace DesktTopCalculator
                 return;
             }
             // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
-            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -423,7 +439,7 @@ namespace DesktTopCalculator
                 return;
             }
             // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
-            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -447,7 +463,7 @@ namespace DesktTopCalculator
                 ClearMethod();
             }
             // カーソル位置の前の文字が(後括弧,.,%)いずれかのとき
-            else if (Display.Text.Length > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\.\%]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\)\.\%]"))
             {
                 return;
             }
@@ -476,7 +492,7 @@ namespace DesktTopCalculator
                 return;
             }
             // カーソル位置の前の文字が数字以外のとき
-            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
             {
                 return;
             }
@@ -506,7 +522,7 @@ namespace DesktTopCalculator
                 return;
             }
             // カーソル位置の前の文字が数字以外のとき
-            else if (Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
             {
                 return;
             }
@@ -621,17 +637,37 @@ namespace DesktTopCalculator
             // カーソルがある場合
             else if (cursorposition > 0)
             {
-                // カーソルの左側一文字削除
-                Display.Text = Display.Text.Remove(cursorposition - 1, 1);
+                // カーソルの直前の文字がカンマのとき
+                if (Display.Text[cursorposition -1] == ',')
+                {
+                    // カーソルの左側二文字削除
+                    Display.Text = Display.Text.Remove(cursorposition - 2, 2);
 
-                // カーソルの位置を1つずらす
-                cursorposition--;
+                    // カーソルの位置を2つずらす
+                    cursorposition -= 2;
 
-                // Displayへ表示
-                UpdateDisplay(Display.Text);
+                    // Displayへ表示
+                    UpdateDisplay(Display.Text);
 
-                // StackへDisplayのテキストとカーソル位置をPush
-                ts.TempStack(Display.Text, cursorposition);
+                    // StackへDisplayのテキストとカーソル位置をPush
+                    ts.TempStack(Display.Text, cursorposition);
+
+                }
+                else
+                {
+                    // カーソルの左側一文字削除
+                    Display.Text = Display.Text.Remove(cursorposition - 1, 1);
+
+                    // カーソルの位置を1つずらす
+                    cursorposition--;
+
+                    // Displayへ表示
+                    UpdateDisplay(Display.Text);
+
+                    // StackへDisplayのテキストとカーソル位置をPush
+                    ts.TempStack(Display.Text, cursorposition);
+
+                }               
             }
         }
 
