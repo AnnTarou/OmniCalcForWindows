@@ -53,6 +53,48 @@ namespace DesktTopCalculator
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
+                // 演算子,％,ピリオドのいづれかが重なるとき
+                else if (Regex.IsMatch(formula, @"[\+\-\*\/\%\.](?=[\+\-\*\/\%\.])"))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+                // 前括弧の直後が*,/,%,.のとき
+                else if (Regex.IsMatch(formula, @"\((?=[\*\/\%\.])"))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+                // 前括弧の直前が%,.のとき
+                else if (Regex.IsMatch(formula, @"(?<=[\%\.])\("))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+                // 後括弧の直前が演算子,%,.,前括弧のとき
+                else if (Regex.IsMatch(formula, @"(?<=[\+\-\*\/\%\.\(])\)"))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+
+                }
+                // 先頭が×,÷,.,%,後括弧のとき
+                else if (Regex.IsMatch(formula, @"^[\*\/\%\.\)]"))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+
+                }
                 // 括弧の数が均等でなかったら
                 else if (IsBalanced(formula) == false)
                 {
@@ -69,7 +111,7 @@ namespace DesktTopCalculator
         }
 
          // 前括弧と後括弧の数が同じか調べる
-        static bool IsBalanced(string formula)
+        public bool IsBalanced(string formula)
         {
                 Stack<char> stack = new Stack<char>();
 
