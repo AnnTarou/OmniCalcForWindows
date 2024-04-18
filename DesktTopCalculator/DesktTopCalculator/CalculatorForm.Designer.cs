@@ -344,15 +344,15 @@
             // 
             // Display
             // 
-            Display.Font = new Font("メイリオ", 17F, FontStyle.Regular, GraphicsUnit.Point, 128);
+            Display.Font = new Font("Consolas", 15F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Display.HideSelection = false;
-            Display.Location = new Point(10, 170);
+            Display.Location = new Point(10, 165);
             Display.MaxLength = 0;
             Display.Multiline = true;
             Display.Name = "Display";
             Display.ReadOnly = true;
             Display.ScrollBars = ScrollBars.Vertical;
-            Display.Size = new Size(460, 105);
+            Display.Size = new Size(460, 117);
             Display.TabIndex = 0;
             Display.TabStop = false;
             Display.Click += Display_Click;
@@ -373,13 +373,13 @@
             // 
             KeepBox.Anchor = AnchorStyles.Top;
             KeepBox.ContextMenuStrip = contextMenuStrip1;
-            KeepBox.Font = new Font("メイリオ", 10F, FontStyle.Regular, GraphicsUnit.Point, 128);
+            KeepBox.Font = new Font("Consolas", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             KeepBox.FormattingEnabled = true;
             KeepBox.HorizontalScrollbar = true;
-            KeepBox.ItemHeight = 30;
-            KeepBox.Location = new Point(10, 10);
+            KeepBox.ItemHeight = 26;
+            KeepBox.Location = new Point(10, 2);
             KeepBox.Name = "KeepBox";
-            KeepBox.Size = new Size(460, 154);
+            KeepBox.Size = new Size(460, 160);
             KeepBox.TabIndex = 50;
             KeepBox.DoubleClick += KeepBox_DoubleClick;
             // 
