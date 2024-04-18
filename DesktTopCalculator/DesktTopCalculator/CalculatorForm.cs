@@ -936,6 +936,12 @@ namespace DesktTopCalculator
                 // 減った文字数分カーソル位置を移動
                 cursorposition += (Display.Text.Substring(cursorposition).Length - aftercursolstr);
             }
+
+            // SelectionStartに現在のカーソル位置を代入
+            Display.SelectionStart = cursorposition;
+
+            // カーソル位置にフォーカスを持ってくるメソッド
+            Display.ScrollToCaret();
         }
 
         // 計算結果から＝以降の文字列を取得しDisplayへ追加する
