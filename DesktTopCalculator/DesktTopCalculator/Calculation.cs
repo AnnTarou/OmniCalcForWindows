@@ -151,8 +151,26 @@ namespace DesktTopCalculator
             // 文字列より計算
             var result = Calculator.Calculate(formula);
 
-            // 結果を文字列に変換
-            resultnumber = result.Result.ToString();
+            // 計算結果を文字列に変換
+            string stringresult = result.Result.ToString();
+
+            // 計算結果が小数点を含まず、かつ整数部の文字数が17桁のとき
+            if (Regex.IsMatch(stringresult, @"\.") == false && stringresult.Length == 17)
+            {
+                // 指数表記に変換
+                resultnumber = result.Result.ToString("E");
+            }
+            // 小数点以下が16桁のとき
+            else if (Regex.IsMatch(stringresult, @"\.(?=\d{16})"))
+            {
+                // 小数点以下の有効表記15桁に変換
+                resultnumber = stringresult.Remove(stringresult.Length-1);
+            }
+            else
+            {
+                // 結果を文字列に変換
+                resultnumber = stringresult;
+            }
         }
     }
 }
