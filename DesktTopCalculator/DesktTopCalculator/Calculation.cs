@@ -163,14 +163,13 @@ namespace DesktTopCalculator
             // 小数点以下が16桁のとき
             else if (Regex.IsMatch(stringresult, @"\.(?=\d{16})"))
             {
-                // 小数点以下15桁までの表記に変換
+                // 小数点以下の有効表記15桁に変換
                 resultnumber = stringresult.Remove(stringresult.Length-1);
             }
             else
             {
                 // 結果を文字列に変換
                 resultnumber = stringresult;
-
             }
         }
     }
