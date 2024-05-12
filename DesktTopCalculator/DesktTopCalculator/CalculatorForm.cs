@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DesktTopCalculator
 {
@@ -329,7 +328,7 @@ namespace DesktTopCalculator
                 ts.TempStack(Display.Text, cursorposition);
             }
             // カーソル位置の前の文字が(.,%,後括弧)いずれかのとき
-            else if (cursorposition > 0　&& Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
             {
                 return;
             }
@@ -341,7 +340,7 @@ namespace DesktTopCalculator
 
                 // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
-                
+
             }
         }
 
@@ -561,23 +560,12 @@ namespace DesktTopCalculator
                     // 計算メソッド
                     cl.Calculate();
 
-                    // 計算不能、計算結果∞、結果空文字のとき
-                    if (cl.resultnumber == "NaN" || cl.resultnumber == "∞" || string.IsNullOrEmpty(cl.resultnumber))
-                    {
-                        // エラーのメッセージボックス表示
-                        MessageBox.Show("Can't calculate", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-                    else
-                    {
-                        // イコール以下を処理してDisplayへ表示
-                        AddEqual("=", cl.resultnumber);
-                        UpdateDisplay(Display.Text);
+                    // イコール以下を処理してDisplayへ表示
+                    AddEqual("=", cl.resultnumber);
+                    UpdateDisplay(Display.Text);
 
-                        // 計算が終了したフラグを立てる
-                        endflag = true;
-                    }
+                    // 計算が終了したフラグを立てる
+                    endflag = true;
                 }
                 else
                 {
@@ -638,7 +626,7 @@ namespace DesktTopCalculator
             else if (cursorposition > 0)
             {
                 // カーソルの直前の文字がカンマのとき
-                if (Display.Text[cursorposition -1] == ',')
+                if (Display.Text[cursorposition - 1] == ',')
                 {
                     // カーソルの左側二文字削除
                     Display.Text = Display.Text.Remove(cursorposition - 2, 2);
@@ -667,7 +655,7 @@ namespace DesktTopCalculator
                     // StackへDisplayのテキストとカーソル位置をPush
                     ts.TempStack(Display.Text, cursorposition);
 
-                }               
+                }
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using Dangl.Calculator;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace DesktTopCalculator
 {
@@ -32,6 +31,14 @@ namespace DesktTopCalculator
                         break;
                 }
             }
+            // 前括弧の直前が数字にマッチしたら*を挿入
+            formula = Regex.Replace(formula, @"(\d)\(", "$1*(");
+
+            // 文字列の先頭が＋の時は削除
+            if (formula.StartsWith("+"))
+            {
+                formula = formula.Remove(0, 1);
+            }
             return formula;
         }
 
@@ -53,32 +60,48 @@ namespace DesktTopCalculator
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
-                // 演算子,％,ピリオドのいづれかが重なるとき
-                else if (Regex.IsMatch(formula, @"[\+\-\*\/\%\.](?=[\+\-\*\/\%\.])"))
+                // 数式の中に％があるとき
+                else if (Regex.IsMatch(formula, @"\%"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
-                // 前括弧の直後が*,/,%,.のとき
-                else if (Regex.IsMatch(formula, @"\((?=[\*\/\%\.])"))
+                // ピリオドまたはマイナスの直後にマイナスがあるとき
+                else if (Regex.IsMatch(formula, @"[\.\-](?=\-)"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
-                // 前括弧の直前が%,.のとき
-                else if (Regex.IsMatch(formula, @"(?<=[\%\.])\("))
+                // 演算子,ピリオドのいづれかが重なるとき（マイナス以外）
+                else if (Regex.IsMatch(formula, @"[\+\-\*\/\.](?=[\+\*\/\.])"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return false;
                 }
-                // 後括弧の直前が演算子,%,.,前括弧のとき
-                else if (Regex.IsMatch(formula, @"(?<=[\+\-\*\/\%\.\(])\)"))
+                // 前括弧の直後が*,/,.のとき
+                else if (Regex.IsMatch(formula, @"\((?=[\*\/\.])"))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+                // 前括弧の直前が.のとき
+                else if (Regex.IsMatch(formula, @"(?<=[\.])\("))
+                {
+                    // エラーメッセージを出し結果を返す
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+                // 後括弧の直前が演算子,.,前括弧のとき
+                else if (Regex.IsMatch(formula, @"(?<=[\+\-\*\/\.\(])\)"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
@@ -86,8 +109,8 @@ namespace DesktTopCalculator
                     return false;
 
                 }
-                // 先頭が×,÷,.,%,後括弧のとき
-                else if (Regex.IsMatch(formula, @"^[\*\/\%\.\)]"))
+                // 先頭が×,÷,.,後括弧のとき
+                else if (Regex.IsMatch(formula, @"^[\*\/\.\)]"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
@@ -110,67 +133,257 @@ namespace DesktTopCalculator
             }
         }
 
-         // 前括弧と後括弧の数が同じか調べる
+        // 前括弧と後括弧の数が同じか調べる
         public bool IsBalanced(string formula)
         {
-                Stack<char> stack = new Stack<char>();
+            Stack<char> stack = new Stack<char>();
 
-                foreach (char c in formula)
+            foreach (char c in formula)
+            {
+                // 前括弧が現れたらPush
+                if (c == '(')
                 {
-                    // 前括弧が現れたらPush
-                    if (c == '(')
+                    stack.Push(c);
+                }
+                // 後括弧が現れたとき前括弧をPop
+                else if (c == ')')
+                {
+                    // 閉じ括弧が現れたが、対応する開き括弧がスタックにない
+                    if (stack.Count == 0)
                     {
-                        stack.Push(c);
+                        return false;
                     }
-                    // 後括弧が現れたとき前括弧をPop
-                    else if (c == ')')
-                    {
-                        // 閉じ括弧が現れたが、対応する開き括弧がスタックにない
-                        if (stack.Count == 0)
-                        {
-                            return false;
-                        }
 
-                        stack.Pop();
-                    }
+                    stack.Pop();
                 }
-                // 最終的にスタックが空であれば、すべての括弧が閉じられている
-                if (stack.Count == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+            }
+            // 最終的にスタックが空であれば、すべての括弧が閉じられている
+            if (stack.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // 計算メソッド
         public void Calculate()
         {
-            // 文字列より計算
-            var result = Calculator.Calculate(formula);
+            // 計算用文字列を逆ポーランド記法に変換
+            List<string> rpn = ToRPN(formula);
 
-            // 計算結果を文字列に変換
-            string stringresult = result.Result.ToString();
+            // 逆ポーランド記法が計算できないとき
+            if (TryEvaluateRPN(rpn, out decimal rpnresult) == false)
+            {
+                if (rpnresult == 0)
+                {
+                    // エラーのメッセージボックス表示
+                    MessageBox.Show("Division by 0 is not possible.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                else if (rpnresult == -1)
+                {
+                    // エラーのメッセージボックス表示
+                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
 
-            // 計算結果が小数点を含まず、かつ整数部の文字数が17桁のとき
-            if (Regex.IsMatch(stringresult, @"\.") == false && stringresult.Length == 17)
-            {
-                // 指数表記に変換
-                resultnumber = result.Result.ToString("E");
-            }
-            // 小数点以下が16桁のとき
-            else if (Regex.IsMatch(stringresult, @"\.(?=\d{16})"))
-            {
-                // 小数点以下の有効表記15桁に変換
-                resultnumber = stringresult.Remove(stringresult.Length-1);
+                }
+                else if (rpnresult == -2)
+                {
+                    // エラーのメッセージボックス表示
+                    MessageBox.Show("The result is too large", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                else
+                {
+                    // エラーのメッセージボックス表示
+                    MessageBox.Show("Could not calculate", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
             }
             else
             {
-                // 結果を文字列に変換
-                resultnumber = stringresult;
+                resultnumber = rpnresult.ToString();
+            }
+        }
+
+        // 文字列を逆ポーランド記法へ変換
+        public List<string> ToRPN(string formula)
+        {
+            // 一時保管のスタックを作成
+            Stack<string> stack = new Stack<string>();
+
+            // 計算用のリストを作成
+            List<string> output = new List<string>();
+
+            // 数字と演算子、括弧を正規表現で分割
+            var matches = Regex.Matches(formula, @"(^[\+\-]\d+\.?\d*)|((?<=\()[\+\-]\d+\.?\d*)|((?<=[\+\*\/])-\d+\.?\d*)|(\d+\.?\d*|\+|-|\*|/|\(|\))");
+            List<string> tokens = matches.Cast<Match>().Select(m => m.Value).ToList();
+
+            foreach (string token in tokens)
+            {
+                switch (token)
+                {
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                        // スタックが空でなく、スタックの先頭の演算子の方が優先順位が高いとき
+                        while (stack.Count > 0 && Precedence(stack.Peek()) >= Precedence(token))
+                        {
+                            // スタックの先頭の演算子をリストへ出力
+                            output.Add(stack.Pop());
+                        }
+                        stack.Push(token);
+                        break;
+                    case "(":
+                        stack.Push(token);
+                        break;
+                    case ")":
+                        // スタックの先頭が前括弧になるまでリストへ出力
+                        while (stack.Peek() != "(")
+                        {
+                            output.Add(stack.Pop());
+                        }
+                        // 前括弧を破棄してbreak
+                        stack.Pop();
+                        break;
+                    default:
+                        output.Add(token);
+                        break;
+                }
+            }
+
+            // スタックが空になるまで演算子をリストへ出力
+            while (stack.Count > 0)
+            {
+                output.Add(stack.Pop());
+            }
+
+            return output;
+
+        }
+
+        // 演算子の優先順位を返す
+        static int Precedence(string op)
+        {
+            switch (op)
+            {
+                case "+":
+                case "-":
+                    return 1;
+                case "*":
+                case "/":
+                    return 2;
+                default:
+                    return 0;
+
+            }
+        }
+
+        // 逆ポーランド記法を計算
+        public bool TryEvaluateRPN(List<string> output, out decimal result)
+        {
+            // 計算用のスタックを作成
+            Stack<decimal> stack = new Stack<decimal>();
+
+            // Popした値を格納する変数    
+            decimal val1, val2;
+
+            // 計算結果を格納する変数
+            decimal mulResult;
+
+            foreach (var token in output)
+            {
+                switch (token)
+                {
+                    case "+":
+                        val2 = stack.Pop();
+                        val1 = stack.Pop();
+                        mulResult = val1 + val2;
+                        // 計算結果がdecimalの最大値を超える場合、エラーを返す
+                        if (mulResult > decimal.MaxValue || mulResult < decimal.MinValue)
+                        {
+                            result = -2;
+                            return false;
+                        }
+                        stack.Push(mulResult);
+                        break;
+                    case "-":
+                        val2 = stack.Pop();
+                        val1 = stack.Pop();
+                        mulResult = val1 - val2;
+                        // 計算結果がdecimalの最大値を超える場合、エラーを返す
+                        if (mulResult > decimal.MaxValue || mulResult < decimal.MinValue)
+                        {
+                            result = -2;
+                            return false;
+                        }
+                        stack.Push(mulResult);
+                        break;
+                    case "*":
+                        val2 = stack.Pop();
+                        val1 = stack.Pop();
+                        mulResult = val1 * val2;
+                        // 計算結果がdecimalの最大値を超える場合、エラーを返す
+                        if (mulResult > decimal.MaxValue || mulResult < decimal.MinValue)
+                        {
+                            result = -2;
+                            return false;
+                        }
+                        stack.Push(mulResult);
+                        break;
+                    case "/":
+                        val2 = stack.Pop();
+                        val1 = stack.Pop();
+                        // 0での除算を検出した場合falseを返す
+                        if (val2 == 0)
+                        {
+                            result = 0;
+                            return false;
+                        }
+                        stack.Push(val1 / val2);
+                        break;
+                    default:
+                        try
+                        {
+                            stack.Push(decimal.Parse(token));
+                        }
+                        // 数値変換に失敗した場合falseを返す
+                        catch (FormatException e)
+                        {
+                            result = -1;
+                            return false;
+
+                        }
+                        // 数値がdecimalの最大値を超える場合falseを返す
+                        catch (OverflowException e)
+                        {
+                            result = -2;
+                            return false;
+                        }
+                        break;
+                }
+            }
+
+            result = stack.Pop();
+
+            // スタックが空でない場合falseを返す
+            if (stack.Count > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }
 }
+
