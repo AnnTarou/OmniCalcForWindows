@@ -58,6 +58,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Check the number of periods", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 // 数式の中に％があるとき
@@ -66,6 +67,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 // ピリオドまたはマイナスの直後にマイナスがあるとき
@@ -74,6 +76,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 // 演算子,ピリオドのいづれかが重なるとき（マイナス以外）
@@ -82,6 +85,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 // 前括弧の直後が*,/,.のとき
@@ -90,6 +94,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 // 前括弧の直前が.のとき
@@ -98,6 +103,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 // 後括弧の直前が演算子,.,前括弧のとき
@@ -106,6 +112,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
 
                 }
@@ -115,6 +122,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
 
                 }
@@ -124,6 +132,7 @@ namespace DesktTopCalculator
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("formula is incorrect", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
                     return false;
                 }
                 else
@@ -169,7 +178,7 @@ namespace DesktTopCalculator
         }
 
         // 計算メソッド
-        public void Calculate()
+        public bool TryCalculate(string formula, out string resultnumber)
         {
             // 計算用文字列を逆ポーランド記法に変換
             List<string> rpn = ToRPN(formula);
@@ -182,14 +191,18 @@ namespace DesktTopCalculator
                     // エラーのメッセージボックス表示
                     MessageBox.Show("Division by 0 is not possible.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    formula = "";
+                    resultnumber = "";
+                    return false;
                 }
                 else if (rpnresult == -1)
                 {
                     // エラーのメッセージボックス表示
                     MessageBox.Show("Formula is invalid", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    formula = "";
+                    resultnumber = "";
+                    return false;
 
                 }
                 else if (rpnresult == -2)
@@ -197,19 +210,25 @@ namespace DesktTopCalculator
                     // エラーのメッセージボックス表示
                     MessageBox.Show("The result is too large", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    formula = "";
+                    resultnumber = "";
+                    return false;
                 }
                 else
                 {
                     // エラーのメッセージボックス表示
                     MessageBox.Show("Could not calculate", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    formula = "";
+                    resultnumber = "";
+                    return false;
                 }
             }
             else
             {
                 resultnumber = rpnresult.ToString();
+                formula = "";
+                return true;
             }
         }
 
@@ -222,8 +241,9 @@ namespace DesktTopCalculator
             // 計算用のリストを作成
             List<string> output = new List<string>();
 
-            // 数字と演算子、括弧を正規表現で分割
-            var matches = Regex.Matches(formula, @"(^[\+\-]\d+\.?\d*)|((?<=\()[\+\-]\d+\.?\d*)|((?<=[\+\*\/])-\d+\.?\d*)|(\d+\.?\d*|\+|-|\*|/|\(|\))");
+            // 計算式の分割
+            // 「-で文字列が始まる」または「前括弧の直後に＋or-がある」または「演算子の後に-がある」数値、その他の場合は数値、演算子、括弧を分割
+            var matches = Regex.Matches(formula, @"(^[\-]\d+\.?\d*)|((?<=\()[\+\-]\d+\.?\d*)|((?<=[\+\*\/])-\d+\.?\d*)|(\d+\.?\d*|\+|-|\*|/|\(|\))");
             List<string> tokens = matches.Cast<Match>().Select(m => m.Value).ToList();
 
             foreach (string token in tokens)
@@ -297,7 +317,7 @@ namespace DesktTopCalculator
             decimal val1, val2;
 
             // 計算結果を格納する変数
-            decimal mulResult;
+            decimal ariresult;
 
             foreach (var token in output)
             {
@@ -306,38 +326,41 @@ namespace DesktTopCalculator
                     case "+":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
-                        mulResult = val1 + val2;
-                        // 計算結果がdecimalの最大値を超える場合、エラーを返す
-                        if (mulResult > decimal.MaxValue || mulResult < decimal.MinValue)
+                        ariresult = val1 + val2;
+                        // 計算結果がdecimalの最大値を超える場合falseを返す
+                        if (ariresult > decimal.MaxValue || ariresult < decimal.MinValue)
                         {
                             result = -2;
                             return false;
                         }
-                        stack.Push(mulResult);
+                        stack.Push(ariresult);
                         break;
                     case "-":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
-                        mulResult = val1 - val2;
-                        // 計算結果がdecimalの最大値を超える場合、エラーを返す
-                        if (mulResult > decimal.MaxValue || mulResult < decimal.MinValue)
+                        ariresult = val1 - val2;
+                        // 計算結果がdecimalの最大値を超える場合falseを返す
+                        if (ariresult > decimal.MaxValue || ariresult < decimal.MinValue)
                         {
                             result = -2;
                             return false;
                         }
-                        stack.Push(mulResult);
+                        stack.Push(ariresult);
                         break;
                     case "*":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
-                        mulResult = val1 * val2;
-                        // 計算結果がdecimalの最大値を超える場合、エラーを返す
-                        if (mulResult > decimal.MaxValue || mulResult < decimal.MinValue)
+                        try
+                        {
+                            ariresult = val1 * val2;
+                        }
+                        // 計算結果がdecimalの最大値を超える場合falseを返す
+                        catch(OverflowException e)
                         {
                             result = -2;
                             return false;
                         }
-                        stack.Push(mulResult);
+                        stack.Push(ariresult);
                         break;
                     case "/":
                         val2 = stack.Pop();
@@ -348,14 +371,24 @@ namespace DesktTopCalculator
                             result = 0;
                             return false;
                         }
-                        stack.Push(val1 / val2);
+                        try
+                        {
+                            stack.Push(val1 / val2);
+
+                        }
+                        // 計算結果がdecimalの最大値を超える場合falseを返す
+                        catch (OverflowException e)
+                        {
+                            result = -2;
+                            return false;
+                        }
                         break;
                     default:
                         try
                         {
                             stack.Push(decimal.Parse(token));
                         }
-                        // 数値変換に失敗した場合falseを返す
+                        // decimalへの変換に失敗した場合falseを返す
                         catch (FormatException e)
                         {
                             result = -1;

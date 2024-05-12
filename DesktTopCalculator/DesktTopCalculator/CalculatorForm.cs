@@ -490,8 +490,8 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            // カーソル位置の前の文字が数字以外のとき
-            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -554,18 +554,30 @@ namespace DesktTopCalculator
             }
             else
             {
+                // Displayの文字列を数式評価用に変換
+                string convertformula = cl.Evaluate(Display.Text);
+
+                // 計算結果を格納する変数
+                string calculationresult;
+
                 // 数式評価でエラーがなければ
-                if (cl.CheckFormula(cl.Evaluate(Display.Text)))
+                if (cl.CheckFormula(convertformula))
                 {
                     // 計算メソッド
-                    cl.Calculate();
+                    if (cl.TryCalculate(convertformula, out calculationresult) == false)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        // イコール以下を処理してDisplayへ表示
+                        AddEqual("=", calculationresult);
+                        UpdateDisplay(Display.Text);
 
-                    // イコール以下を処理してDisplayへ表示
-                    AddEqual("=", cl.resultnumber);
-                    UpdateDisplay(Display.Text);
+                        // 計算が終了したフラグを立てる
+                        endflag = true;
 
-                    // 計算が終了したフラグを立てる
-                    endflag = true;
+                    }
                 }
                 else
                 {
@@ -846,7 +858,7 @@ namespace DesktTopCalculator
                         decimal answer = number * 0.01m;
 
                         // 計算結果を文字列に変換して代入
-                        expression[i - 1] = answer.ToString("#,##0.################");
+                        expression[i - 1] = answer.ToString("#,##0.############################");
 
                         // %のインデックスを削除
                         expression.RemoveAt(i);
