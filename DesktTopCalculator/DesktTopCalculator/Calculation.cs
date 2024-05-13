@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DesktTopCalculator
 {
@@ -14,6 +15,10 @@ namespace DesktTopCalculator
         // 計算用に文字列を変換
         public string? Evaluate(string txt)
         {
+            // 可変長文字列を扱うためのStringBuilderクラスのインスタンス生成
+            StringBuilder formulaBuilder = new StringBuilder();
+
+            // 文字列の中のカンマを削除 
             string str = txt.Replace(",", "");
 
             for (int i = 0; i < str.Length; i++)
@@ -21,16 +26,20 @@ namespace DesktTopCalculator
                 switch (str[i])
                 {
                     case '×':
-                        formula += "*";
+                        formulaBuilder.Append("*");
                         break;
                     case '÷':
-                        formula += "/";
+                        formulaBuilder.Append("/");
                         break;
                     default:
-                        formula += str[i];
+                        formulaBuilder.Append(str[i]);
                         break;
                 }
             }
+
+            // 計算式をformulaへ格納
+            formula = formulaBuilder.ToString();
+
             // 前括弧の直前が数字にマッチしたら*を挿入
             formula = Regex.Replace(formula, @"(\d)\(", "$1*(");
 
