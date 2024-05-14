@@ -381,8 +381,8 @@ namespace DesktTopCalculator
                 // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
-            // カーソル位置の前の文字が(+,-,×,÷,.,%)いずれかのとき
-            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\.\%]"))
+            // カーソル位置の前の文字が(-,.,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\-\.\%]"))
             {
                 return;
             }
