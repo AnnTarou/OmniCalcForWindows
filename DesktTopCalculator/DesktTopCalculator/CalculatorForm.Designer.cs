@@ -67,7 +67,7 @@
             button1.BackColor = SystemColors.ActiveCaption;
             button1.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button1.Location = new Point(2, 423);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(76, 64);
             button1.TabIndex = 0;
@@ -79,7 +79,7 @@
             // 
             buttonminus.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonminus.Location = new Point(232, 358);
-            buttonminus.Margin = new Padding(2, 2, 2, 2);
+            buttonminus.Margin = new Padding(2);
             buttonminus.Name = "buttonminus";
             buttonminus.Size = new Size(76, 64);
             buttonminus.TabIndex = 22;
@@ -91,7 +91,7 @@
             // 
             buttonpuls.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonpuls.Location = new Point(232, 422);
-            buttonpuls.Margin = new Padding(2, 2, 2, 2);
+            buttonpuls.Margin = new Padding(2);
             buttonpuls.Name = "buttonpuls";
             buttonpuls.Size = new Size(76, 64);
             buttonpuls.TabIndex = 23;
@@ -104,7 +104,7 @@
             buttonequal.BackColor = Color.FromArgb(255, 128, 128);
             buttonequal.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonequal.Location = new Point(232, 487);
-            buttonequal.Margin = new Padding(2, 2, 2, 2);
+            buttonequal.Margin = new Padding(2);
             buttonequal.Name = "buttonequal";
             buttonequal.Size = new Size(76, 64);
             buttonequal.TabIndex = 24;
@@ -116,7 +116,7 @@
             // 
             buttondivision.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttondivision.Location = new Point(309, 487);
-            buttondivision.Margin = new Padding(2, 2, 2, 2);
+            buttondivision.Margin = new Padding(2);
             buttondivision.Name = "buttondivision";
             buttondivision.Size = new Size(76, 64);
             buttondivision.TabIndex = 25;
@@ -129,7 +129,7 @@
             button2.BackColor = SystemColors.ActiveCaption;
             button2.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button2.Location = new Point(78, 422);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(76, 64);
             button2.TabIndex = 26;
@@ -142,7 +142,7 @@
             button3.BackColor = SystemColors.ActiveCaption;
             button3.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button3.Location = new Point(155, 422);
-            button3.Margin = new Padding(2, 2, 2, 2);
+            button3.Margin = new Padding(2);
             button3.Name = "button3";
             button3.Size = new Size(76, 64);
             button3.TabIndex = 27;
@@ -155,7 +155,7 @@
             button4.BackColor = SystemColors.ActiveCaption;
             button4.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button4.Location = new Point(2, 358);
-            button4.Margin = new Padding(2, 2, 2, 2);
+            button4.Margin = new Padding(2);
             button4.Name = "button4";
             button4.Size = new Size(76, 64);
             button4.TabIndex = 28;
@@ -168,7 +168,7 @@
             button5.BackColor = SystemColors.ActiveCaption;
             button5.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button5.Location = new Point(78, 358);
-            button5.Margin = new Padding(2, 2, 2, 2);
+            button5.Margin = new Padding(2);
             button5.Name = "button5";
             button5.Size = new Size(76, 64);
             button5.TabIndex = 29;
@@ -181,7 +181,7 @@
             button6.BackColor = SystemColors.ActiveCaption;
             button6.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button6.Location = new Point(155, 358);
-            button6.Margin = new Padding(2, 2, 2, 2);
+            button6.Margin = new Padding(2);
             button6.Name = "button6";
             button6.Size = new Size(76, 64);
             button6.TabIndex = 30;
@@ -195,7 +195,7 @@
             button7.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button7.ForeColor = SystemColors.ControlText;
             button7.Location = new Point(2, 294);
-            button7.Margin = new Padding(2, 2, 2, 2);
+            button7.Margin = new Padding(2);
             button7.Name = "button7";
             button7.Size = new Size(76, 64);
             button7.TabIndex = 31;
@@ -208,7 +208,7 @@
             button8.BackColor = SystemColors.ActiveCaption;
             button8.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button8.Location = new Point(78, 293);
-            button8.Margin = new Padding(2, 2, 2, 2);
+            button8.Margin = new Padding(2);
             button8.Name = "button8";
             button8.Size = new Size(76, 64);
             button8.TabIndex = 32;
@@ -221,7 +221,7 @@
             button9.BackColor = SystemColors.ActiveCaption;
             button9.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button9.Location = new Point(155, 294);
-            button9.Margin = new Padding(2, 2, 2, 2);
+            button9.Margin = new Padding(2);
             button9.Name = "button9";
             button9.Size = new Size(76, 64);
             button9.TabIndex = 33;
@@ -234,7 +234,7 @@
             button0.BackColor = SystemColors.ActiveCaption;
             button0.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button0.Location = new Point(2, 487);
-            button0.Margin = new Padding(2, 2, 2, 2);
+            button0.Margin = new Padding(2);
             button0.Name = "button0";
             button0.Size = new Size(76, 64);
             button0.TabIndex = 34;
@@ -247,7 +247,7 @@
             button00.BackColor = SystemColors.ActiveCaption;
             button00.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             button00.Location = new Point(78, 487);
-            button00.Margin = new Padding(2, 2, 2, 2);
+            button00.Margin = new Padding(2);
             button00.Name = "button00";
             button00.Size = new Size(76, 64);
             button00.TabIndex = 35;
@@ -260,7 +260,7 @@
             buttonPeriod.BackColor = SystemColors.ActiveCaption;
             buttonPeriod.Font = new Font("メイリオ", 20F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonPeriod.Location = new Point(155, 487);
-            buttonPeriod.Margin = new Padding(2, 2, 2, 2);
+            buttonPeriod.Margin = new Padding(2);
             buttonPeriod.Name = "buttonPeriod";
             buttonPeriod.Size = new Size(76, 64);
             buttonPeriod.TabIndex = 36;
@@ -272,7 +272,7 @@
             // 
             buttonfrontbracket.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonfrontbracket.Location = new Point(232, 293);
-            buttonfrontbracket.Margin = new Padding(2, 2, 2, 2);
+            buttonfrontbracket.Margin = new Padding(2);
             buttonfrontbracket.Name = "buttonfrontbracket";
             buttonfrontbracket.Size = new Size(76, 64);
             buttonfrontbracket.TabIndex = 37;
@@ -284,7 +284,7 @@
             // 
             buttonmultiply.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonmultiply.Location = new Point(309, 422);
-            buttonmultiply.Margin = new Padding(2, 2, 2, 2);
+            buttonmultiply.Margin = new Padding(2);
             buttonmultiply.Name = "buttonmultiply";
             buttonmultiply.Size = new Size(76, 64);
             buttonmultiply.TabIndex = 38;
@@ -296,7 +296,7 @@
             // 
             buttonpercent.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonpercent.Location = new Point(309, 358);
-            buttonpercent.Margin = new Padding(2, 2, 2, 2);
+            buttonpercent.Margin = new Padding(2);
             buttonpercent.Name = "buttonpercent";
             buttonpercent.Size = new Size(76, 64);
             buttonpercent.TabIndex = 39;
@@ -308,7 +308,7 @@
             // 
             buttonbackbracket.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonbackbracket.Location = new Point(309, 293);
-            buttonbackbracket.Margin = new Padding(2, 2, 2, 2);
+            buttonbackbracket.Margin = new Padding(2);
             buttonbackbracket.Name = "buttonbackbracket";
             buttonbackbracket.Size = new Size(76, 64);
             buttonbackbracket.TabIndex = 40;
@@ -320,7 +320,7 @@
             // 
             buttonAllClear.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonAllClear.Location = new Point(2, 229);
-            buttonAllClear.Margin = new Padding(2, 2, 2, 2);
+            buttonAllClear.Margin = new Padding(2);
             buttonAllClear.Name = "buttonAllClear";
             buttonAllClear.RightToLeft = RightToLeft.No;
             buttonAllClear.Size = new Size(76, 64);
@@ -333,7 +333,7 @@
             // 
             buttonTextClear.Font = new Font("メイリオ", 14F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonTextClear.Location = new Point(78, 229);
-            buttonTextClear.Margin = new Padding(2, 2, 2, 2);
+            buttonTextClear.Margin = new Padding(2);
             buttonTextClear.Name = "buttonTextClear";
             buttonTextClear.Size = new Size(76, 64);
             buttonTextClear.TabIndex = 42;
@@ -346,7 +346,7 @@
             buttonKeep.BackColor = Color.FromArgb(255, 255, 192);
             buttonKeep.Font = new Font("メイリオ", 10F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonKeep.Location = new Point(309, 228);
-            buttonKeep.Margin = new Padding(2, 2, 2, 2);
+            buttonKeep.Margin = new Padding(2);
             buttonKeep.Name = "buttonKeep";
             buttonKeep.Size = new Size(76, 64);
             buttonKeep.TabIndex = 43;
@@ -358,7 +358,7 @@
             // 
             buttonchardelete.Font = new Font("メイリオ", 9F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonchardelete.Location = new Point(155, 229);
-            buttonchardelete.Margin = new Padding(2, 2, 2, 2);
+            buttonchardelete.Margin = new Padding(2);
             buttonchardelete.Name = "buttonchardelete";
             buttonchardelete.Size = new Size(76, 64);
             buttonchardelete.TabIndex = 44;
@@ -371,7 +371,7 @@
             Display.Font = new Font("Consolas", 15F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Display.HideSelection = false;
             Display.Location = new Point(8, 132);
-            Display.Margin = new Padding(2, 2, 2, 2);
+            Display.Margin = new Padding(2);
             Display.MaxLength = 0;
             Display.Multiline = true;
             Display.Name = "Display";
@@ -387,7 +387,7 @@
             // 
             buttonreturn.Font = new Font("メイリオ", 9F, FontStyle.Bold, GraphicsUnit.Point, 128);
             buttonreturn.Location = new Point(232, 229);
-            buttonreturn.Margin = new Padding(2, 2, 2, 2);
+            buttonreturn.Margin = new Padding(2);
             buttonreturn.Name = "buttonreturn";
             buttonreturn.Size = new Size(76, 64);
             buttonreturn.TabIndex = 49;
@@ -404,7 +404,7 @@
             KeepBox.HorizontalScrollbar = true;
             KeepBox.ItemHeight = 22;
             KeepBox.Location = new Point(8, 2);
-            KeepBox.Margin = new Padding(2, 2, 2, 2);
+            KeepBox.Margin = new Padding(2);
             KeepBox.Name = "KeepBox";
             KeepBox.Size = new Size(369, 114);
             KeepBox.TabIndex = 50;
@@ -465,10 +465,10 @@
             Controls.Add(buttonminus);
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "CalculatorForm";
-            Text = "calculator";
+            Text = "OmniCalc+";
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();

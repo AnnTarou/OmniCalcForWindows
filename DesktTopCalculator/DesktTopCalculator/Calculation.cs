@@ -65,7 +65,7 @@ namespace DesktTopCalculator
                 if (Regex.IsMatch(formula, @"\d*\.\d+\."))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Check the number of periods", "Error",
+                    MessageBox.Show("Check the number of periods", "Error:E-04",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -74,7 +74,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"\%"))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-05",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -83,7 +83,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"[\.\-](?=\-)"))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-06",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -92,7 +92,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"[\+\-\*\/\.](?=[\+\*\/\.])"))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-07",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -101,7 +101,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"\((?=[\*\/\.])"))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-08",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -110,7 +110,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"(?<=[\.])\("))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-09",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -119,7 +119,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"(?<=[\+\-\*\/\.\(])\)"))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid","Error:E-10",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -129,7 +129,7 @@ namespace DesktTopCalculator
                 else if (Regex.IsMatch(formula, @"^[\*\/\.\)]"))
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-11",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -139,7 +139,7 @@ namespace DesktTopCalculator
                 else if (IsBalanced(formula) == false)
                 {
                     // エラーメッセージを出し結果を返す
-                    MessageBox.Show("formula is incorrect", "Error",
+                    MessageBox.Show("Unequal number of brackets", "Error:E-12",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     return false;
@@ -195,29 +195,32 @@ namespace DesktTopCalculator
             // 逆ポーランド記法が計算できないとき
             if (TryEvaluateRPN(rpn, out decimal rpnresult) == false)
             {
+                // 0の除算を検出した場合
                 if (rpnresult == 0)
                 {
                     // エラーのメッセージボックス表示
-                    MessageBox.Show("Division by 0 is not possible.", "Error",
+                    MessageBox.Show("Division by 0 is not possible.", "Error:E-13",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     resultnumber = "";
                     return false;
                 }
+                // 数値の変換に失敗した場合
                 else if (rpnresult == -1)
                 {
                     // エラーのメッセージボックス表示
-                    MessageBox.Show("Formula is invalid", "Error",
+                    MessageBox.Show("Formula is invalid", "Error:E-14",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     resultnumber = "";
                     return false;
 
                 }
+                // 計算結果がdecimalの最大値を超える場合
                 else if (rpnresult == -2)
                 {
                     // エラーのメッセージボックス表示
-                    MessageBox.Show("The result is too large", "Error",
+                    MessageBox.Show("The result is too large", "Error:E-15",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     resultnumber = "";
@@ -226,7 +229,7 @@ namespace DesktTopCalculator
                 else
                 {
                     // エラーのメッセージボックス表示
-                    MessageBox.Show("Could not calculate", "Error",
+                    MessageBox.Show("Cannot be calculated", "Error:E-16",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     resultnumber = "";
@@ -296,7 +299,6 @@ namespace DesktTopCalculator
             }
 
             return output;
-
         }
 
         // 演算子の優先順位を返す
@@ -312,11 +314,10 @@ namespace DesktTopCalculator
                     return 2;
                 default:
                     return 0;
-
             }
         }
 
-        // 逆ポーランド記法を計算
+        // 逆ポーランド記法を計算して結果を返す
         public bool TryEvaluateRPN(List<string> output, out decimal result)
         {
             // 計算用のスタックを作成

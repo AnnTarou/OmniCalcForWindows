@@ -870,7 +870,7 @@ namespace DesktTopCalculator
                     catch (FormatException)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Number is invalid", "Error",
+                        MessageBox.Show("Number is invalid", "Error:E-01",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除
@@ -885,7 +885,7 @@ namespace DesktTopCalculator
                     catch (OverflowException)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Number of digits is out of range", "Error",
+                        MessageBox.Show("Number of digits is out of range", "Error:E-02",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除
@@ -900,7 +900,7 @@ namespace DesktTopCalculator
                     catch (Exception)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Cannot be calculated", "Error",
+                        MessageBox.Show("Cannot be calculated", "Error:E-03",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除
