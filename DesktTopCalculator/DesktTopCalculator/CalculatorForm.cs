@@ -900,7 +900,7 @@ namespace DesktTopCalculator
                     catch (Exception)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Cannot be calculated", "Error:E-03",
+                        MessageBox.Show("you get a critical hit", "Error:E-03",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除

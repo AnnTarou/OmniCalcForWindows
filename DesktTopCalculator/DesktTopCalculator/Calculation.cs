@@ -79,8 +79,8 @@ namespace DesktTopCalculator
                     formula = "";
                     return false;
                 }
-                // ピリオドまたはマイナスの直後にマイナスがあるとき
-                else if (Regex.IsMatch(formula, @"[\.\-](?=\-)"))
+                // マイナス,. の直後にマイナスがあるとき
+                else if (Regex.IsMatch(formula, @"[\-\.](?=\-)"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error:E-06",
@@ -88,8 +88,8 @@ namespace DesktTopCalculator
                     formula = "";
                     return false;
                 }
-                // 演算子,ピリオドのいづれかが重なるとき（マイナス以外）
-                else if (Regex.IsMatch(formula, @"[\+\-\*\/\.](?=[\+\*\/\.])"))
+                // 演算子,ピリオドに演算子のいづれかが重なるとき（マイナス以外）
+                else if (Regex.IsMatch(formula, @"[\+\-\*\/\.](?=[\+\*\/])"))
                 {
                     // エラーメッセージを出し結果を返す
                     MessageBox.Show("Formula is invalid", "Error:E-07",
@@ -226,10 +226,20 @@ namespace DesktTopCalculator
                     resultnumber = "";
                     return false;
                 }
+                // 入力値がdecimal型に変換できない場合
+                else if (rpnresult == -3)
+                {
+                    // エラーのメッセージボックス表示
+                    MessageBox.Show("Input value is too large", "Error:E-16",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formula = "";
+                    resultnumber = "";
+                    return false;
+                }
                 else
                 {
                     // エラーのメッセージボックス表示
-                    MessageBox.Show("Cannot be calculated", "Error:E-16",
+                    MessageBox.Show("you get a critical hit", "Error:E-17",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formula = "";
                     resultnumber = "";
@@ -336,9 +346,12 @@ namespace DesktTopCalculator
                     case "+":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
-                        ariresult = val1 + val2;
+                        try
+                        {
+                            ariresult = val1 + val2;
+                        }
                         // 計算結果がdecimalの最大値を超える場合falseを返す
-                        if (ariresult > decimal.MaxValue || ariresult < decimal.MinValue)
+                        catch (OverflowException e)
                         {
                             result = -2;
                             return false;
@@ -348,9 +361,12 @@ namespace DesktTopCalculator
                     case "-":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
-                        ariresult = val1 - val2;
+                        try
+                        {
+                            ariresult = val1 - val2;
+                        }
                         // 計算結果がdecimalの最大値を超える場合falseを返す
-                        if (ariresult > decimal.MaxValue || ariresult < decimal.MinValue)
+                        catch (OverflowException e)
                         {
                             result = -2;
                             return false;
@@ -408,7 +424,7 @@ namespace DesktTopCalculator
                         // 数値がdecimalの最大値を超える場合falseを返す
                         catch (OverflowException e)
                         {
-                            result = -2;
+                            result = -3;
                             return false;
                         }
                         break;
