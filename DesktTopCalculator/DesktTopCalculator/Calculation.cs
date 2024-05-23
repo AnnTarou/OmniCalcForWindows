@@ -337,7 +337,7 @@ namespace DesktTopCalculator
             decimal val1, val2;
 
             // 計算結果を格納する変数
-            decimal ariresult;
+            decimal calcresult;
 
             foreach (var token in output)
             {
@@ -348,7 +348,7 @@ namespace DesktTopCalculator
                         val1 = stack.Pop();
                         try
                         {
-                            ariresult = val1 + val2;
+                            calcresult = val1 + val2;
                         }
                         // 計算結果がdecimalの最大値を超える場合falseを返す
                         catch (OverflowException e)
@@ -356,14 +356,14 @@ namespace DesktTopCalculator
                             result = -2;
                             return false;
                         }
-                        stack.Push(ariresult);
+                        stack.Push(calcresult);
                         break;
                     case "-":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
                         try
                         {
-                            ariresult = val1 - val2;
+                            calcresult = val1 - val2;
                         }
                         // 計算結果がdecimalの最大値を超える場合falseを返す
                         catch (OverflowException e)
@@ -371,14 +371,14 @@ namespace DesktTopCalculator
                             result = -2;
                             return false;
                         }
-                        stack.Push(ariresult);
+                        stack.Push(calcresult);
                         break;
                     case "*":
                         val2 = stack.Pop();
                         val1 = stack.Pop();
                         try
                         {
-                            ariresult = val1 * val2;
+                            calcresult = val1 * val2;
                         }
                         // 計算結果がdecimalの最大値を超える場合falseを返す
                         catch(OverflowException e)
@@ -386,7 +386,7 @@ namespace DesktTopCalculator
                             result = -2;
                             return false;
                         }
-                        stack.Push(ariresult);
+                        stack.Push(calcresult);
                         break;
                     case "/":
                         val2 = stack.Pop();
