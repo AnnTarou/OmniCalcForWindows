@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DesktTopCalculator
 {
@@ -329,7 +328,7 @@ namespace DesktTopCalculator
                 ts.TempStack(Display.Text, cursorposition);
             }
             // カーソル位置の前の文字が(.,%,後括弧)いずれかのとき
-            else if (cursorposition > 0　&& Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\.\%\)]"))
             {
                 return;
             }
@@ -341,7 +340,7 @@ namespace DesktTopCalculator
 
                 // StackへDisplayのテキストとカーソル位置をPush
                 ts.TempStack(Display.Text, cursorposition);
-                
+
             }
         }
 
@@ -382,8 +381,8 @@ namespace DesktTopCalculator
                 // 計算結果の数字部分のみを切りだしDisplayへ表示
                 SelectResult();
             }
-            // カーソル位置の前の文字が(+,-,×,÷,.,%)いずれかのとき
-            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\.\%]"))
+            // カーソル位置の前の文字が(-,.,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\-\.\%]"))
             {
                 return;
             }
@@ -491,8 +490,8 @@ namespace DesktTopCalculator
             {
                 return;
             }
-            // カーソル位置の前の文字が数字以外のとき
-            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"\D"))
+            // カーソル位置の前の文字が(+,-,×,÷,前括弧,.,%)いずれかのとき
+            else if (cursorposition > 0 && Regex.IsMatch(Display.Text[cursorposition - 1].ToString(), @"[\+\-\u00D7\u00F7\(\.\%]"))
             {
                 return;
             }
@@ -555,28 +554,29 @@ namespace DesktTopCalculator
             }
             else
             {
+                // Displayの文字列を数式評価用に変換
+                string convertformula = cl.Evaluate(Display.Text);
+
+                // 計算結果を格納する変数
+                string calculationresult;
+
                 // 数式評価でエラーがなければ
-                if (cl.CheckFormula(cl.Evaluate(Display.Text)))
+                if (cl.CheckFormula(convertformula))
                 {
                     // 計算メソッド
-                    cl.Calculate();
-
-                    // 計算不能、計算結果∞、結果空文字のとき
-                    if (cl.resultnumber == "NaN" || cl.resultnumber == "∞" || string.IsNullOrEmpty(cl.resultnumber))
+                    if (cl.TryCalculate(convertformula, out calculationresult) == false)
                     {
-                        // エラーのメッセージボックス表示
-                        MessageBox.Show("Can't calculate", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
                     else
                     {
                         // イコール以下を処理してDisplayへ表示
-                        AddEqual("=", cl.resultnumber);
+                        AddEqual("=", calculationresult);
                         UpdateDisplay(Display.Text);
 
                         // 計算が終了したフラグを立てる
                         endflag = true;
+
                     }
                 }
                 else
@@ -638,7 +638,7 @@ namespace DesktTopCalculator
             else if (cursorposition > 0)
             {
                 // カーソルの直前の文字がカンマのとき
-                if (Display.Text[cursorposition -1] == ',')
+                if (Display.Text[cursorposition - 1] == ',')
                 {
                     // カーソルの左側二文字削除
                     Display.Text = Display.Text.Remove(cursorposition - 2, 2);
@@ -667,7 +667,7 @@ namespace DesktTopCalculator
                     // StackへDisplayのテキストとカーソル位置をPush
                     ts.TempStack(Display.Text, cursorposition);
 
-                }               
+                }
             }
         }
 
@@ -858,7 +858,7 @@ namespace DesktTopCalculator
                         decimal answer = number * 0.01m;
 
                         // 計算結果を文字列に変換して代入
-                        expression[i - 1] = answer.ToString("#,##0.################");
+                        expression[i - 1] = answer.ToString("#,##0.############################");
 
                         // %のインデックスを削除
                         expression.RemoveAt(i);
@@ -870,7 +870,7 @@ namespace DesktTopCalculator
                     catch (FormatException)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Number is invalid", "Error",
+                        MessageBox.Show("Number is invalid", "Error:E-01",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除
@@ -885,7 +885,7 @@ namespace DesktTopCalculator
                     catch (OverflowException)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Number of digits is out of range", "Error",
+                        MessageBox.Show("Number of digits is out of range", "Error:E-02",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除
@@ -900,7 +900,7 @@ namespace DesktTopCalculator
                     catch (Exception)
                     {
                         // エラーのメッセージボックス表示
-                        MessageBox.Show("Cannot be calculated", "Error",
+                        MessageBox.Show("you get a critical hit", "Error:E-03",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // %のインデックスを削除
